@@ -8,13 +8,26 @@ import { registerAnchor } from "../labelRegistry";
 import { glowTexture } from "../glowTexture";
 import { useWishes } from "@/stores/wishes";
 import type { Wish } from "@/features/wishes/wish";
-import { rippleLiftAt } from "./ripplePool";
+import { emitRipple, rippleLiftAt } from "./ripplePool";
 import { rng } from "./scatter";
 
 const PETALS = 8;
 const PETAL_TILT = 0.75;
-/** Seconds a lantern takes to drift from the steps to the far water. */
+/** Seconds a lantern takes to drift from the steps to its resting place. */
 const JOURNEY = 150;
+/** How far out lanterns come to rest; close enough to stay visible and hoverable. */
+const REST_Z = -18;
+/** Launch point: clear of the terrace and of the buttons overlaying the near water. */
+const START_Z = -4;
+/** Seconds a new lantern takes to unfold on the water. */
+const UNFOLD = 1.2;
+
+interface Spawn {
+  /** Progress already made when this session first saw the lantern. */
+  offset: number;
+  /** Scene clock when it first appeared; set on the first frame it is placed. */
+  bornAt: number | null;
+}
 
 interface Lane {
   lane: number;
@@ -31,7 +44,7 @@ interface PlaceArgs {
   anchors: (Object3D | null)[];
   wishes: readonly Wish[];
   lanes: readonly Lane[];
-  spawned: Map<string, number>;
+  spawned: Map<string, Spawn>;
   now: number;
   reducedMotion: boolean;
 }
@@ -52,15 +65,24 @@ function placeLanterns({
   const glowPos = glowGeo.attributes.position as BufferAttribute;
   wishes.forEach((w, i) => {
     const { lane, speed, phase, size } = lanes[i];
-    const start = spawned.get(w.id) ?? 0;
-    // Progress 0 at the steps to 1 far out; it stops at the horizon.
-    const progress = Math.min(1, start + (reducedMotion ? 0 : (now * speed) / JOURNEY));
-    // Starts just off the terrace steps and drifts to the far water.
-    const z = 0.2 - progress * 52;
-    const x = lane * (0.2 + progress * 1.7) + Math.sin(now * 0.2 + phase) * 0.3;
+    const spawn = spawned.get(w.id);
+    if (!spawn) return;
+    // Measured from when this lantern appeared, not from when the scene started.
+    if (spawn.bornAt === null) {
+      spawn.bornAt = now;
+      // A fresh release touches the water, so the eye finds it.
+      if (spawn.offset === 0 && !reducedMotion) emitRipple(lane * 0.7, START_Z, now);
+    }
+    const age = now - spawn.bornAt;
+    // Progress 0 at the steps to 1 at its resting place, where it stays.
+    const progress = Math.min(1, spawn.offset + (reducedMotion ? 0 : (age * speed) / JOURNEY));
+    const z = START_Z + progress * (REST_Z - START_Z);
+    const x = lane * (0.7 + progress * 0.9) + Math.sin(now * 0.2 + phase) * 0.3;
     const bob = reducedMotion ? 0 : Math.sin(now * 0.7 + phase) * 0.025;
     const y = 0.06 + bob + rippleLiftAt(x, z, now);
-    const fade = 1 - Math.max(0, (progress - 0.85) / 0.15);
+    // Unfolds from nothing when released; never fades away afterwards.
+    const t = reducedMotion ? 1 : Math.min(1, age / UNFOLD);
+    const fade = spawn.offset > 0 ? 1 : 1 - (1 - t) ** 3;
 
     for (let k = 0; k < PETALS; k++) {
       const ring = k % 2;
@@ -101,7 +123,7 @@ export function WishLanterns({ reducedMotion }: { reducedMotion: boolean }) {
   const cores = useRef<InstancedMesh>(null);
   const glows = useRef<Points>(null);
   const dummy = useMemo(() => new Object3D(), []);
-  const spawned = useRef(new Map<string, number>());
+  const spawned = useRef(new Map<string, Spawn>());
   const anchors = useRef<(Object3D | null)[]>([]);
 
   const petalGeo = useMemo(() => {
@@ -130,11 +152,11 @@ export function WishLanterns({ reducedMotion }: { reducedMotion: boolean }) {
   useEffect(() => {
     const seen = spawned.current;
     wishes.forEach((w, i) => {
-      if (!seen.has(w.id))
-        seen.set(
-          w.id,
-          i === wishes.length - 1 && releaseSeq > 0 ? 0 : 0.25 + 0.6 * ((wishes.length - i) / wishes.length),
-        );
+      if (!seen.has(w.id)) {
+        const fresh = i === wishes.length - 1 && releaseSeq > 0;
+        // Older wishes rest further out; the newest restored one sits nearest.
+        seen.set(w.id, { offset: fresh ? 0 : 0.35 + 0.5 * ((wishes.length - 1 - i) / wishes.length), bornAt: null });
+      }
     });
     for (const id of [...seen.keys()]) if (!wishes.some((w) => w.id === id)) seen.delete(id);
   }, [wishes, releaseSeq]);
@@ -144,7 +166,9 @@ export function WishLanterns({ reducedMotion }: { reducedMotion: boolean }) {
       wishes.map((w) => {
         const seed = [...w.id].reduce((a, c) => a + c.charCodeAt(0), 0);
         const r = rng(seed + 1);
-        return { lane: (r() - 0.5) * 16, speed: 0.7 + r() * 0.6, phase: r() * 6.28, size: 1.1 + r() * 0.4 };
+        // Lanes keep to either side of centre, where the page's buttons sit over the water.
+        const side = r() < 0.5 ? -1 : 1;
+        return { lane: side * (3.5 + r() * 4), speed: 0.7 + r() * 0.6, phase: r() * 6.28, size: 2.2 + r() * 0.5 };
       }),
     [wishes],
   );
@@ -175,7 +199,7 @@ export function WishLanterns({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <group>
       <instancedMesh ref={petals} args={[petalGeo, undefined, wishes.length * PETALS]} frustumCulled={false}>
-        <meshStandardMaterial color="#fff0dc" roughness={0.45} emissive="#ffb86b" emissiveIntensity={0.5} />
+        <meshStandardMaterial color="#fff0dc" roughness={0.45} emissive="#ffb86b" emissiveIntensity={0.9} />
       </instancedMesh>
       <instancedMesh
         ref={cores}
@@ -200,10 +224,11 @@ export function WishLanterns({ reducedMotion }: { reducedMotion: boolean }) {
         <pointsMaterial
           map={glowTexture()}
           color="#ffd48a"
-          size={2.1}
+          size={4.2}
           sizeAttenuation
           transparent
-          opacity={0.8}
+          opacity={1}
+          toneMapped={false}
           depthWrite={false}
           blending={AdditiveBlending}
         />
