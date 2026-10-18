@@ -2,10 +2,12 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { MathUtils, type Group, type PointLight } from "three";
+import { MathUtils, type Group, type Mesh, type PointLight } from "three";
 import { PALETTE } from "@/lib/palette";
 import { DestinyCenterpiece } from "@/components/destiny/DestinyCenterpiece";
 import { useExperience } from "@/stores/experience";
+import { useDestiny } from "@/stores/destiny";
+import { termMarkForBranch } from "@/features/destiny/solarTermWheel";
 import { Crystal } from "../Crystal";
 import { FloatingIsland } from "../FloatingIsland";
 import { Lantern } from "../Lantern";
@@ -41,6 +43,43 @@ const PEDESTAL: readonly (readonly [number, number])[] = [
 ];
 
 const LANTERN_ANGLES = [0, 1, 2, 3].map((i) => Math.PI / 4 + (i * Math.PI) / 2);
+
+/**
+ * Lights the one mark on the 24-term ring that the chart's month pillar opened,
+ * so the platform shows which solar term you were born under.
+ */
+function BirthTermMark() {
+  const branch = useDestiny((s) => s.chart?.pillars.month.branch);
+  const inside = useExperience((s) => s.view === "destiny");
+  const light = useRef<Mesh>(null);
+  const mark = branch ? termMarkForBranch(branch) : null;
+
+  useFrame((state, delta) => {
+    const m = light.current;
+    if (!m) return;
+    const want = mark && inside ? 1 : 0;
+    const breath = want > 0 ? 0.85 + Math.sin(state.clock.elapsedTime * 1.4) * 0.15 : 0;
+    m.scale.setScalar(MathUtils.damp(m.scale.x, want * breath, 4, delta));
+    m.visible = m.scale.x > 0.02;
+  });
+
+  if (!mark) return null;
+  // Mark 0 is 立春; the ring runs clockwise from the platform's front.
+  const angle = (mark.index / 24) * Math.PI * 2;
+  return (
+    <group rotation={[0, -angle, 0]}>
+      <mesh ref={light} position={[1.45, 0.07, 0]} scale={0}>
+        <sphereGeometry args={[0.07, 16, 12]} />
+        <meshStandardMaterial
+          color={PALETTE.moonlight}
+          emissive={CHAMPAGNE.color}
+          emissiveIntensity={1.6}
+          toneMapped={false}
+        />
+      </mesh>
+    </group>
+  );
+}
 
 /** Destiny Palace: an octagonal obsidian observatory platform carrying the celestial instrument. */
 export function DestinyPalace({ reducedMotion }: { reducedMotion: boolean }) {
@@ -81,13 +120,14 @@ export function DestinyPalace({ reducedMotion }: { reducedMotion: boolean }) {
           </mesh>
         </group>
       ))}
-      {/* The 24 solar terms marked around the upper tier */}
+      {/* The 24 solar terms marked around the upper tier, with the chart's own term lit */}
       <group position={[0, top + 0.002, 0]}>
         <TickRing radius={1.38} count={24} majorEvery={6} length={0.14} width={0.016} color="#d9c79c" emissive={0.3} />
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[1.36, 1.375, 96]} />
           <meshStandardMaterial {...CHAMPAGNE} />
         </mesh>
+        <BirthTermMark />
       </group>
 
       {/* Instrument pedestal, trim, and the half-ring cradle holding the sphere */}

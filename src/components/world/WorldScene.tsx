@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Environment, Lightformer } from "@react-three/drei";
 import type { Mesh } from "three";
 import type { RenderQuality } from "@/lib/webgl";
 import { CelestialRing } from "./CelestialRing";
 import { QualityContext } from "./quality";
+import { useSky } from "./useSky";
+import { DEFAULT_SKY_LOOK, SkyLookContext, type SkyLook } from "./skyContext";
+import { MOOD_PALETTES, SEASON_PALETTES } from "@/features/sky/palette";
 import { FarShore } from "./garden/FarShore";
 import { Garden } from "./garden/Garden";
 import { Butterflies } from "./garden/Butterflies";
@@ -43,92 +46,109 @@ interface WorldSceneProps {
 export function WorldScene({ reducedMotion, quality }: WorldSceneProps) {
   // Set once when the moon mounts; feeds the light-shaft effect.
   const [moon, setMoon] = useState<Mesh | null>(null);
+  const sky = useSky();
+  const look = useMemo<SkyLook>(
+    () => ({
+      sky,
+      mood: sky ? MOOD_PALETTES[sky.mood] : DEFAULT_SKY_LOOK.mood,
+      season: sky ? SEASON_PALETTES[sky.season] : DEFAULT_SKY_LOOK.season,
+    }),
+    [sky],
+  );
   return (
     <QualityContext.Provider value={quality}>
-      <color attach="background" args={[PALETTE.midnight]} />
-      <fog attach="fog" args={["#2b2563", 34, 160]} />
+      <SkyLookContext.Provider value={look}>
+        <color attach="background" args={[PALETTE.midnight]} />
+        <fog attach="fog" args={[look.mood.fog, 34, 160]} />
 
-      {/* Procedural studio for pearlescent/crystal reflections — no HDR download. */}
-      <Environment resolution={128} frames={1}>
-        <Lightformer form="circle" intensity={2.2} color={PALETTE.moonlight} position={[0, 8, -20]} scale={8} />
-        <Lightformer
-          form="rect"
-          intensity={0.8}
-          color={PALETTE.lavender}
-          position={[-12, 3, 4]}
-          scale={[10, 4, 1]}
-          target={[0, 0, 0]}
+        {/* Procedural studio for pearlescent/crystal reflections — no HDR download. */}
+        <Environment resolution={128} frames={1}>
+          <Lightformer form="circle" intensity={2.2} color={PALETTE.moonlight} position={[0, 8, -20]} scale={8} />
+          <Lightformer
+            form="rect"
+            intensity={0.8}
+            color={PALETTE.lavender}
+            position={[-12, 3, 4]}
+            scale={[10, 4, 1]}
+            target={[0, 0, 0]}
+          />
+          <Lightformer
+            form="rect"
+            intensity={0.6}
+            color={PALETTE.paleBlue}
+            position={[12, 4, 6]}
+            scale={[10, 4, 1]}
+            target={[0, 0, 0]}
+          />
+          <Lightformer
+            form="ring"
+            intensity={0.4}
+            color={PALETTE.amethyst}
+            position={[0, -6, 0]}
+            rotation-x={Math.PI / 2}
+            scale={14}
+          />
+        </Environment>
+
+        <hemisphereLight args={[look.mood.skyLight, look.mood.groundLight, look.mood.ambientIntensity]} />
+        {/* Moon key: high and behind, so tops and back edges catch the light. */}
+        <directionalLight color={PALETTE.moonlight} position={[0, 40, -70]} intensity={1.5} />
+        {/* Rim lights from behind each side separate silhouettes from the sky. */}
+        <directionalLight color={PALETTE.lavender} position={[-30, 12, -40]} intensity={1.1} />
+        <directionalLight color={PALETTE.paleBlue} position={[30, 12, -40]} intensity={1.0} />
+        {/* Soft cool fill from the viewer's side. */}
+        <directionalLight color={PALETTE.paleBlue} position={[4, 10, 24]} intensity={0.45} />
+
+        <CameraRig reducedMotion={reducedMotion} />
+        <LabelProjector />
+        <SkyDome />
+        <StarField reducedMotion={reducedMotion} />
+        <Moon
+          position={MOON.position}
+          radius={MOON.radius}
+          phaseAge={sky?.moon.age}
+          illumination={sky?.moon.illumination ?? 1}
+          onMesh={setMoon}
         />
-        <Lightformer
-          form="rect"
-          intensity={0.6}
-          color={PALETTE.paleBlue}
-          position={[12, 4, 6]}
-          scale={[10, 4, 1]}
-          target={[0, 0, 0]}
-        />
-        <Lightformer
-          form="ring"
-          intensity={0.4}
-          color={PALETTE.amethyst}
-          position={[0, -6, 0]}
-          rotation-x={Math.PI / 2}
-          scale={14}
-        />
-      </Environment>
+        <CelestialRing reducedMotion={reducedMotion} />
+        <DistantStructures reducedMotion={reducedMotion} />
+        <CrystalField reducedMotion={reducedMotion} />
+        <HorizonRidges />
+        <WaterSurface reducedMotion={reducedMotion} resolution={quality === "high" ? 512 : 256} />
+        <MoonGlints reducedMotion={reducedMotion} />
+        {quality === "high" && <Mist reducedMotion={reducedMotion} />}
+        <ForegroundCrystals reducedMotion={reducedMotion} />
+        <FarShore reducedMotion={reducedMotion} />
+        <SparkleStars reducedMotion={reducedMotion} />
+        <Garden reducedMotion={reducedMotion} />
+        <Petals reducedMotion={reducedMotion} />
+        <Butterflies reducedMotion={reducedMotion} />
+        <ShootingStars reducedMotion={reducedMotion} />
+        <Charms reducedMotion={reducedMotion} />
+        <LotusLanterns reducedMotion={reducedMotion} />
+        <Motes reducedMotion={reducedMotion} />
 
-      <hemisphereLight args={["#a99cff", "#2a2160", 0.7]} />
-      {/* Moon key: high and behind, so tops and back edges catch the light. */}
-      <directionalLight color={PALETTE.moonlight} position={[0, 40, -70]} intensity={1.5} />
-      {/* Rim lights from behind each side separate silhouettes from the sky. */}
-      <directionalLight color={PALETTE.lavender} position={[-30, 12, -40]} intensity={1.1} />
-      <directionalLight color={PALETTE.paleBlue} position={[30, 12, -40]} intensity={1.0} />
-      {/* Soft cool fill from the viewer's side. */}
-      <directionalLight color={PALETTE.paleBlue} position={[4, 10, 24]} intensity={0.45} />
+        <DestinationHotspot
+          id="tarot"
+          position={DESTINATION_ANCHORS.tarot}
+          labelHeight={LABEL_HEIGHT.tarot}
+          radius={3.4}
+          reducedMotion={reducedMotion}
+        >
+          <TarotGarden reducedMotion={reducedMotion} />
+        </DestinationHotspot>
+        <DestinationHotspot
+          id="destiny"
+          position={DESTINATION_ANCHORS.destiny}
+          labelHeight={LABEL_HEIGHT.destiny}
+          radius={3.6}
+          reducedMotion={reducedMotion}
+        >
+          <DestinyPalace reducedMotion={reducedMotion} />
+        </DestinationHotspot>
 
-      <CameraRig reducedMotion={reducedMotion} />
-      <LabelProjector />
-      <SkyDome />
-      <StarField reducedMotion={reducedMotion} />
-      <Moon position={MOON.position} radius={MOON.radius} onMesh={setMoon} />
-      <CelestialRing reducedMotion={reducedMotion} />
-      <DistantStructures reducedMotion={reducedMotion} />
-      <CrystalField reducedMotion={reducedMotion} />
-      <HorizonRidges />
-      <WaterSurface reducedMotion={reducedMotion} resolution={quality === "high" ? 512 : 256} />
-      <MoonGlints reducedMotion={reducedMotion} />
-      {quality === "high" && <Mist reducedMotion={reducedMotion} />}
-      <ForegroundCrystals reducedMotion={reducedMotion} />
-      <FarShore reducedMotion={reducedMotion} />
-      <SparkleStars reducedMotion={reducedMotion} />
-      <Garden reducedMotion={reducedMotion} />
-      <Petals reducedMotion={reducedMotion} />
-      <Butterflies reducedMotion={reducedMotion} />
-      <ShootingStars reducedMotion={reducedMotion} />
-      <Charms reducedMotion={reducedMotion} />
-      <LotusLanterns reducedMotion={reducedMotion} />
-      <Motes reducedMotion={reducedMotion} />
-
-      <DestinationHotspot
-        id="tarot"
-        position={DESTINATION_ANCHORS.tarot}
-        labelHeight={LABEL_HEIGHT.tarot}
-        radius={3.4}
-        reducedMotion={reducedMotion}
-      >
-        <TarotGarden reducedMotion={reducedMotion} />
-      </DestinationHotspot>
-      <DestinationHotspot
-        id="destiny"
-        position={DESTINATION_ANCHORS.destiny}
-        labelHeight={LABEL_HEIGHT.destiny}
-        radius={3.6}
-        reducedMotion={reducedMotion}
-      >
-        <DestinyPalace reducedMotion={reducedMotion} />
-      </DestinationHotspot>
-
-      <Effects moon={quality === "high" ? moon : null} multisampling={quality === "high" ? 4 : 0} />
+        <Effects moon={quality === "high" ? moon : null} multisampling={quality === "high" ? 4 : 0} />
+      </SkyLookContext.Provider>
     </QualityContext.Provider>
   );
 }

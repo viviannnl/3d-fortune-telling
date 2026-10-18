@@ -4,6 +4,8 @@ import { bezierXZ } from "./scatter";
 import { CrystalOrb } from "./CrystalOrb";
 import { Flora, type Clump } from "./Flora";
 import { LilyPads } from "./LilyPads";
+import { Ripples } from "./Ripples";
+import { WishLanterns } from "./WishLanterns";
 import { EDGE, Terrace, TERRACE_Y, URNS } from "./Terrace";
 import { Wisteria } from "./Wisteria";
 import { Motes } from "../Motes";
@@ -59,7 +61,9 @@ export function Garden({ reducedMotion }: { reducedMotion: boolean }) {
             decay={1.5}
           />
         ))}
-      <Motes reducedMotion={reducedMotion} count={70} area={FIREFLY_AREA} color="#ffd47a" seed={2} />
+      <Motes reducedMotion={reducedMotion} count={70} area={FIREFLY_AREA} color="#ffd47a" seed={2} followPointer />
+      <Ripples reducedMotion={reducedMotion} />
+      <WishLanterns reducedMotion={reducedMotion} />
     </group>
   );
 }

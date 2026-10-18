@@ -4,6 +4,7 @@ import { useLayoutEffect, useMemo, useRef } from "react";
 import { CylinderGeometry, Matrix4, SphereGeometry, type BufferGeometry, type InstancedMesh } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useQuality } from "../quality";
+import { useSkyLook } from "../skyContext";
 import { applyInstances, rng, type Instance } from "./scatter";
 
 export interface Clump {
@@ -15,9 +16,6 @@ export interface Clump {
   /** Overall plant scale. */
   size?: number;
 }
-
-const FLOWER_COLORS = ["#ff9ad5", "#f26cc6", "#c48cff", "#fff4fb", "#ffb8e8", "#a679ff", "#ff7fb8"];
-const LEAF_COLORS = ["#24564f", "#2a4d63", "#1f4a5a", "#2f6058"];
 
 let shared: { petals: BufferGeometry; spike: BufferGeometry; stem: BufferGeometry; leaf: BufferGeometry } | null = null;
 function geometries() {
@@ -58,7 +56,13 @@ function geometries() {
   return shared;
 }
 
-function scatter(clumps: readonly Clump[], seed: number, density: number) {
+function scatter(
+  clumps: readonly Clump[],
+  seed: number,
+  density: number,
+  flowerColors: readonly string[],
+  leafColors: readonly string[],
+) {
   const r = rng(seed);
   const lavender: Instance[] = [];
   const flowers: Instance[] = [];
@@ -83,7 +87,7 @@ function scatter(clumps: readonly Clump[], seed: number, density: number) {
         position: [x, y + k * (0.18 + r() * 0.35), z],
         rotation: [(r() - 0.5) * 0.9, r() * 6.3, (r() - 0.5) * 0.9],
         scale: k * (0.09 + r() * 0.1),
-        color: FLOWER_COLORS[Math.floor(r() * FLOWER_COLORS.length)],
+        color: flowerColors[Math.floor(r() * flowerColors.length)],
       });
     }
     for (let i = 0; i < Math.round((c.leaves ?? 0) * density); i++) {
@@ -91,7 +95,7 @@ function scatter(clumps: readonly Clump[], seed: number, density: number) {
         position: at(c),
         rotation: [(r() - 0.5) * 1.6, r() * 6.3, (r() - 0.5) * 1.6],
         scale: k * (0.7 + r() * 0.8),
-        color: LEAF_COLORS[Math.floor(r() * LEAF_COLORS.length)],
+        color: leafColors[Math.floor(r() * leafColors.length)],
       });
     }
   }
@@ -105,7 +109,11 @@ function scatter(clumps: readonly Clump[], seed: number, density: number) {
 export function Flora({ clumps, seed = 1 }: { clumps: readonly Clump[]; seed?: number }) {
   const g = geometries();
   const density = useQuality() === "high" ? 1 : 0.4;
-  const items = useMemo(() => scatter(clumps, seed, density), [clumps, seed, density]);
+  const { season } = useSkyLook();
+  const items = useMemo(
+    () => scatter(clumps, seed, density, season.flowers, season.leaves),
+    [clumps, seed, density, season],
+  );
   const spikes = useRef<InstancedMesh>(null);
   const stems = useRef<InstancedMesh>(null);
   const blossoms = useRef<InstancedMesh>(null);
@@ -127,7 +135,12 @@ export function Flora({ clumps, seed = 1 }: { clumps: readonly Clump[]; seed?: n
         <meshStandardMaterial color="#3b6a5e" roughness={0.8} />
       </instancedMesh>
       <instancedMesh ref={spikes} args={[g.spike, undefined, Math.max(1, items.lavender.length)]}>
-        <meshStandardMaterial color="#a879ff" emissive="#8a4dff" emissiveIntensity={0.75} roughness={0.55} />
+        <meshStandardMaterial
+          color={season.spike}
+          emissive={season.spikeEmissive}
+          emissiveIntensity={0.75}
+          roughness={0.55}
+        />
       </instancedMesh>
       <instancedMesh ref={blossoms} args={[g.petals, undefined, Math.max(1, items.flowers.length)]}>
         <meshStandardMaterial roughness={0.5} emissive="#e98be0" emissiveIntensity={0.35} />

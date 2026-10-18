@@ -132,4 +132,14 @@ test.describe("destiny palace", () => {
     await expect(page.getByRole("heading", { name: "你的四柱" })).toBeVisible();
     expect(await pillars(page)).toEqual(before);
   });
+
+  test("names the solar term the chart was born under", async ({ page }) => {
+    await enterPalace(page);
+    await fill(page, { date: "2024-02-20", time: "12:00", place: "shanghai" });
+    await page.getByRole("button", { name: "Calculate chart" }).click();
+    expect((await pillars(page))[1]).toBe("丙寅");
+    await expect(page.getByTestId("birth-term")).toContainText("立春");
+    await page.waitForTimeout(2000);
+    await page.screenshot({ path: "test-results/destiny-term-mark.png" });
+  });
 });

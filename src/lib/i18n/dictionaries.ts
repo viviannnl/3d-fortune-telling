@@ -35,6 +35,25 @@ const en = {
     about: "About & methods",
   },
   hint: "Move to explore · Click to enter",
+  wishes: {
+    open: "Release a lantern",
+    title: "Write a wish",
+    placeholder: "A quiet wish, in a few words",
+    privacy: "Kept in this browser only. Never uploaded, never part of a reading.",
+    release: "Set it adrift",
+    cancel: "Cancel",
+    empty: "Write something first.",
+    released: "Your lantern is drifting out across the water.",
+    count: "{n} of your lanterns are on the water",
+    clear: "Clear my lanterns",
+    close: "Close",
+  },
+  sky: {
+    label: "Tonight's sky",
+    termDay: "day {n} of {term}",
+    seasons: { spring: "Spring", summer: "Summer", autumn: "Autumn", winter: "Winter" },
+    note: "The moon shows its real phase, and the garden follows the Chinese solar terms.",
+  },
   charms: {
     hint: "Some lights hide small secrets",
     progress: "{n} of {total} hidden lights found",
@@ -99,6 +118,14 @@ const en = {
       curatedNote: "Card meanings are curated summaries of traditional symbolism.",
     },
     unknownCard: "Unknown card",
+    detail: {
+      open: "Look closer",
+      close: "Close card",
+      reversed: "Shown reversed",
+      meaning: "Meaning",
+      keywords: "Keywords",
+      focus: "For your question",
+    },
   },
   destiny: {
     form: {
@@ -171,6 +198,7 @@ const en = {
       trueSolarAhead: "ahead of",
       trueSolarBehind: "behind",
       trueSolarDiffer: "Under the true-solar-time convention, your hour pillar would be different.",
+      bornUnder: "Born in the solar month that opened at {term}, lit on the platform ring.",
       method: "How this is calculated",
       sizeNote:
         "In the sphere, each element's size follows this tally. It is a picture of the count, not of strength or fortune.",
@@ -304,6 +332,25 @@ const zh: Dictionary = {
     about: "关于与方法",
   },
   hint: "移动鼠标探索 · 点击进入",
+  wishes: {
+    open: "放一盏灯",
+    title: "写下心愿",
+    placeholder: "一句简短的心愿",
+    privacy: "只保存在这台浏览器里，不会上传，也不会进入任何解读。",
+    release: "让它漂走",
+    cancel: "取消",
+    empty: "请先写点什么。",
+    released: "你的灯正漂向水面远处。",
+    count: "水面上有你放的 {n} 盏灯",
+    clear: "清除我的灯",
+    close: "关闭",
+  },
+  sky: {
+    label: "今夜的天空",
+    termDay: "{term}第 {n} 天",
+    seasons: { spring: "春", summer: "夏", autumn: "秋", winter: "冬" },
+    note: "月亮呈现真实月相，花园随二十四节气流转。",
+  },
   charms: {
     hint: "有些光里，藏着小秘密",
     progress: "已发现 {n}/{total} 盏藏起来的光",
@@ -368,6 +415,14 @@ const zh: Dictionary = {
       curatedNote: "牌义为对传统象征的整理摘要。",
     },
     unknownCard: "未知的牌",
+    detail: {
+      open: "细看这张牌",
+      close: "关闭",
+      reversed: "逆位呈现",
+      meaning: "牌义",
+      keywords: "关键词",
+      focus: "针对你的问题",
+    },
   },
   destiny: {
     form: {
@@ -437,6 +492,7 @@ const zh: Dictionary = {
       trueSolarAhead: "早",
       trueSolarBehind: "晚",
       trueSolarDiffer: "若采用真太阳时，你的时柱会有所不同。",
+      bornUnder: "你生于「{term}」开启的节气月，平台圆环上已点亮该刻度。",
       method: "计算方法说明",
       sizeNote: "在天球中，各元素的大小对应这里的计数。它只是数量的呈现，并不代表强弱或运势。",
       explore: "选择一柱或一种元素，查看说明。",

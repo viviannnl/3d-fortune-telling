@@ -3,7 +3,7 @@
  * Nothing plays until setAudioEnabled(true) is called from a user gesture.
  */
 
-export type SoundName = "hover" | "enter" | "select" | "flip" | "reveal" | "back" | "blessing";
+export type SoundName = "hover" | "enter" | "select" | "flip" | "reveal" | "back" | "blessing" | "ripple" | "element";
 
 interface Ambient {
   stop: () => void;
@@ -126,6 +126,17 @@ export function setAudioEnabled(on: boolean): void {
   }
 }
 
+/** 五声音阶 (gong–shang–jue–zhi–yu) note per element, in generating-cycle order. */
+const ELEMENT_TONES: Record<string, number> = { wood: 329.63, fire: 392.0, earth: 261.63, metal: 293.66, water: 440.0 };
+
+/** Plays one pentatonic note for a Five Elements object. */
+export function playElementTone(element: string): void {
+  const base = ELEMENT_TONES[element];
+  if (!enabled || !ctx || !master || ctx.state !== "running" || !base) return;
+  chime(ctx, master, base, 0.045, 1.9);
+  chime(ctx, master, base * 2, 0.018, 1.2, 0.04);
+}
+
 export function playSound(name: SoundName): void {
   if (!enabled || !ctx || !master || ctx.state !== "running") return;
   switch (name) {
@@ -144,6 +155,13 @@ export function playSound(name: SoundName): void {
       break;
     case "reveal":
       chime(ctx, master, 880, 0.03, 1.6);
+      break;
+    case "ripple":
+      // A soft low plink, like a drop on still water.
+      chime(ctx, master, 196, 0.02, 1.1);
+      break;
+    case "element":
+      // Pentatonic note chosen by the caller via `elementTone`.
       break;
     case "blessing":
       // A soft rising arpeggio, like wind chimes.

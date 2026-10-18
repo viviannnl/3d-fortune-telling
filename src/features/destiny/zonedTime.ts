@@ -104,6 +104,13 @@ export function resolveWallTime(w: WallTime, timeZone: string): WallResolution {
   return { kind: "ambiguous", earlier: candidates[0], later: candidates[candidates.length - 1] };
 }
 
+/** Instant of a wall-clock time interpreted at a fixed UTC offset. */
+export function instantFromWallAtOffset(w: WallTime & { second?: number }, offsetMinutes: number): number {
+  const d = new Date(Date.UTC(2000, w.month - 1, w.day, w.hour, w.minute, w.second ?? 0));
+  d.setUTCFullYear(w.year);
+  return d.getTime() - offsetMinutes * 60_000;
+}
+
 /** Wall time of an instant at a fixed UTC offset. */
 export function wallTimeAtOffset(instantMs: number, offsetMinutes: number): WallTime & { second: number } {
   const d = new Date(instantMs + offsetMinutes * 60_000);

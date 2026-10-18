@@ -13,6 +13,7 @@ import {
   type ShaderMaterial,
 } from "three";
 import { glowTexture } from "../glowTexture";
+import { useSkyLook } from "../skyContext";
 import { applyInstances, rng, type Instance } from "./scatter";
 
 const SHORE_Z = -64;
@@ -89,6 +90,7 @@ function Waterfall({
 
 /** The far shore: a dark landmass with cypress and round-crowned trees, scattered warm lights, and two waterfalls. */
 export function FarShore({ reducedMotion }: { reducedMotion: boolean }) {
+  const { season } = useSkyLook();
   const cone = useMemo(() => new ConeGeometry(1, 1, 7), []);
   const crown = useMemo(() => new IcosahedronGeometry(1, 1), []);
   useEffect(
@@ -98,6 +100,7 @@ export function FarShore({ reducedMotion }: { reducedMotion: boolean }) {
     },
     [cone, crown],
   );
+  const shore = season.shore;
   const { cypress, round, lights } = useMemo(() => {
     const r = rng(101);
     const cypress: Instance[] = [];
@@ -108,7 +111,7 @@ export function FarShore({ reducedMotion }: { reducedMotion: boolean }) {
       if (Math.abs(x) < 9) continue; // keep the moon's horizon clear
       const z = SHORE_Z - r() * 10;
       const tone = 0.85 + r() * 0.3;
-      const color = `rgb(${Math.round(24 * tone)}, ${Math.round(30 * tone)}, ${Math.round(70 * tone)})`;
+      const color = `rgb(${Math.round(shore[0] * tone)}, ${Math.round(shore[1] * tone)}, ${Math.round(shore[2] * tone)})`;
       if (r() > 0.45) {
         const h = 3 + r() * 6;
         cypress.push({ position: [x, h / 2 + 0.6, z], scale: [0.55 + r() * 0.4, h, 0.55 + r() * 0.4], color });
@@ -121,7 +124,7 @@ export function FarShore({ reducedMotion }: { reducedMotion: boolean }) {
     const lights = new BufferGeometry();
     lights.setAttribute("position", new BufferAttribute(new Float32Array(lightPos), 3));
     return { cypress, round, lights };
-  }, []);
+  }, [shore]);
   useEffect(() => () => lights.dispose(), [lights]);
   const cyRef = useRef<InstancedMesh>(null);
   const roRef = useRef<InstancedMesh>(null);

@@ -6,6 +6,8 @@ import { ImageDown, X } from "lucide-react";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { Button } from "@/components/ui/Button";
 import { tarotShareContent } from "@/features/share/content";
+import type { CardSelection } from "@/features/tarot/types";
+import { CardDetail } from "./CardDetail";
 import { getCard } from "@/features/tarot/cards";
 import { selectionsOf } from "@/features/tarot/reading";
 import { useDictionary } from "@/lib/i18n/useDictionary";
@@ -47,6 +49,7 @@ export function TarotReadingPanel() {
       .request(aiKey, "/api/interpret/tarot", { locale, category: reading.category, selections }, subject);
   };
   const [sharing, setSharing] = useState(false);
+  const [detail, setDetail] = useState<CardSelection | null>(null);
   const aiSummary = entry?.status === "success" ? entry.interpretation.shareableSummary : null;
   const category = reading.category;
   const buildShare = useCallback(
@@ -111,6 +114,14 @@ export function TarotReadingPanel() {
                 <h4 className="mt-1 font-serif text-2xl text-text">{card ? card.name[locale] : t.unknownCard}</h4>
                 {card && (
                   <>
+                    <button
+                      type="button"
+                      onClick={() => setDetail(sel)}
+                      data-testid="card-detail-open"
+                      className="mt-1 cursor-pointer rounded-sm text-xs text-accent underline decoration-border underline-offset-4 transition-colors duration-150 hover:text-moonlight"
+                    >
+                      {t.detail.open}
+                    </button>
                     <p className="mt-2 text-[0.95rem] leading-relaxed text-text">{card[sel.orientation][locale]}</p>
                     <p className="mt-2 text-xs text-text-muted">
                       <span className="sr-only">{t.panel.keywords}: </span>
@@ -135,6 +146,7 @@ export function TarotReadingPanel() {
             {shareText.open}
           </Button>
         </div>
+        {detail && category && <CardDetail selection={detail} category={category} onClose={() => setDetail(null)} />}
         {sharing && (
           <ShareDialog
             build={buildShare}

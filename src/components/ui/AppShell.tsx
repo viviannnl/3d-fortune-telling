@@ -13,6 +13,8 @@ import { DestinationShell } from "./DestinationShell";
 import { LanguageToggle } from "./LanguageToggle";
 import { PreferencesBootstrap } from "./PreferencesBootstrap";
 import { SanctuaryOverlay } from "./SanctuaryOverlay";
+import { SkyLine } from "./SkyLine";
+import { WishLabels } from "./WishLabels";
 import { SoundToggle } from "./SoundToggle";
 
 /** Full-screen root: the 3D world underneath, minimal accessible HTML on top. */
@@ -25,6 +27,7 @@ export function AppShell() {
       <PreferencesBootstrap />
       <WorldStage />
       {view === "sanctuary" && <DestinationLabels />}
+      {view === "sanctuary" && <WishLabels />}
       {view === "sanctuary" && <BlessingToast />}
       {view === "destiny" && <ElementLabels />}
 
@@ -45,7 +48,12 @@ export function AppShell() {
           <div className="max-w-xs [text-shadow:var(--text-halo)]">
             <p className="font-serif text-2xl font-medium tracking-wide text-text md:text-[1.75rem]">{t.brand.name}</p>
             {view === "sanctuary" && (
-              <p className="mt-1 hidden text-sm leading-relaxed text-text-muted sm:block">{t.brand.tagline}</p>
+              <>
+                <p className="mt-1 hidden text-sm leading-relaxed text-text-muted sm:block">{t.brand.tagline}</p>
+                <div className="hidden sm:block">
+                  <SkyLine />
+                </div>
+              </>
             )}
           </div>
           <div className="pointer-events-auto flex flex-wrap justify-end gap-2">

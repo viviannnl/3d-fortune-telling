@@ -2,7 +2,16 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { AdditiveBlending, CanvasTexture, Color, SRGBColorSpace, type Mesh, type SpriteMaterial } from "three";
+import {
+  AdditiveBlending,
+  CanvasTexture,
+  Color,
+  Euler,
+  SRGBColorSpace,
+  Vector3,
+  type Mesh,
+  type SpriteMaterial,
+} from "three";
 import { glowTexture } from "./glowTexture";
 import { PALETTE } from "@/lib/palette";
 import { useExperience } from "@/stores/experience";
@@ -13,6 +22,10 @@ interface MoonProps {
   position: Vec3;
   radius: number;
   scale?: number;
+  /** Synodic age, 0 at new moon and 0.5 at full. Omit for a fully lit disc. */
+  phaseAge?: number;
+  /** Lit fraction, used to dim the halo near a new moon. */
+  illumination?: number;
   /** Receives the moon mesh (once) so post-processing can cast light shafts from it. */
   onMesh?: (mesh: Mesh | null) => void;
 }
@@ -52,6 +65,10 @@ uniform vec3 uLight;
 uniform vec3 uShadow;
 uniform vec3 uRim;
 uniform float uRadius;
+/** Direction of the sun in the moon's own space; drives the phase terminator. */
+uniform vec3 uSunDir;
+/** 0 = no phase (fully lit disc), 1 = full phase shading. */
+uniform float uPhaseStrength;
 varying vec3 vObj;
 varying vec3 vNormalView;
 void main() {
@@ -70,12 +87,23 @@ void main() {
   float facing = clamp(vNormalView.z, 0.0, 1.0);
   col *= mix(0.72, 1.0, pow(facing, 0.5));
   col = mix(col, uRim, pow(1.0 - facing, 3.0) * 0.45);
-  gl_FragColor = vec4(col, 1.0);
+
+  // Phase: the lit hemisphere faces the sun. The unlit side keeps only a trace
+  // of earthshine so a crescent reads as a crescent instead of a grey ball,
+  // and the terminator softens as it approaches the limb.
+  float sun = dot(p, normalize(uSunDir));
+  float lit = smoothstep(-0.12, 0.1, sun);
+  float shade = mix(1.0, mix(0.012, 1.0, lit), uPhaseStrength);
+  col *= shade;
+  // Fade the dark limb out entirely rather than silhouetting it against the sky.
+  float alpha = mix(1.0, clamp(0.03 + lit * 1.15, 0.0, 1.0), uPhaseStrength);
+
+  gl_FragColor = vec4(col, alpha);
   #include <colorspace_fragment>
 }
 `;
 
-export function Moon({ position, radius, scale = 1, onMesh }: MoonProps) {
+export function Moon({ position, radius, scale = 1, phaseAge, illumination = 1, onMesh }: MoonProps) {
   const halo = useMemo(() => createHaloTexture(), []);
   useEffect(() => () => halo.dispose(), [halo]);
   const haloMaterial = useRef<SpriteMaterial>(null);
@@ -86,14 +114,26 @@ export function Moon({ position, radius, scale = 1, onMesh }: MoonProps) {
       uShadow: { value: new Color("#9d90c4") },
       uRim: { value: new Color(PALETTE.lavender) },
       uRadius: { value: radius },
+      // The sun direction sweeps around as the synodic month advances: at new
+      // moon it points away from the viewer, at full moon straight at them.
+      // The mesh is rotated for surface detail, so aim in that same local frame.
+      uSunDir: {
+        value: new Vector3(
+          Math.sin((phaseAge ?? 0.5) * Math.PI * 2),
+          0,
+          -Math.cos((phaseAge ?? 0.5) * Math.PI * 2),
+        ).applyEuler(new Euler(-0.1, 0.6, -0.3)),
+      },
+      uPhaseStrength: { value: phaseAge === undefined ? 0 : 1 },
     }),
-    [radius],
+    [radius, phaseAge],
   );
 
   useFrame((_, delta) => {
     const m = haloMaterial.current;
     if (!m) return;
-    const target = 0.55 * (1 - 0.5 * useExperience.getState().dim);
+    // A thin crescent lights the sky far less than a full moon.
+    const target = 0.55 * (0.35 + 0.65 * illumination) * (1 - 0.5 * useExperience.getState().dim);
     m.opacity += (target - m.opacity) * Math.min(1, delta * 2);
   });
 
@@ -125,7 +165,14 @@ export function Moon({ position, radius, scale = 1, onMesh }: MoonProps) {
       </sprite>
       <mesh ref={onMesh} rotation={[0.3, -0.6, 0.1]}>
         <sphereGeometry args={[radius, 96, 64]} />
-        <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} fog={false} />
+        <shaderMaterial
+          uniforms={uniforms}
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          transparent
+          depthWrite={false}
+          fog={false}
+        />
       </mesh>
     </group>
   );

@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { DoubleSide, Euler, Matrix4, Quaternion, SphereGeometry, Vector3, type InstancedMesh } from "three";
+import { useSkyLook } from "../skyContext";
 import { applyInstances, rng } from "./scatter";
 
 const COUNT = 70;
 
 /** Wisteria petals drifting down from the top corners with a slow tumble and sway. */
 export function Petals({ reducedMotion }: { reducedMotion: boolean }) {
+  const { season } = useSkyLook();
   const ref = useRef<InstancedMesh>(null);
   const geometry = useMemo(() => {
     const g = new SphereGeometry(1, 6, 4);
@@ -16,6 +18,7 @@ export function Petals({ reducedMotion }: { reducedMotion: boolean }) {
     return g;
   }, []);
   useEffect(() => () => geometry.dispose(), [geometry]);
+  const drift = season.driftColors;
   const seeds = useMemo(() => {
     const r = rng(303);
     return Array.from({ length: COUNT }, () => {
@@ -26,10 +29,10 @@ export function Petals({ reducedMotion }: { reducedMotion: boolean }) {
         speed: 0.25 + r() * 0.3,
         phase: r() * 100,
         sway: 0.4 + r() * 0.8,
-        color: ["#c79bff", "#e9c6ff", "#ff9ad5", "#b07dff"][Math.floor(r() * 4)],
+        color: drift[Math.floor(r() * drift.length)],
       };
     });
-  }, []);
+  }, [drift]);
   useEffect(() => {
     applyInstances(
       ref.current,
@@ -59,7 +62,12 @@ export function Petals({ reducedMotion }: { reducedMotion: boolean }) {
 
   return (
     <instancedMesh ref={ref} args={[geometry, undefined, COUNT]} frustumCulled={false}>
-      <meshStandardMaterial side={DoubleSide} roughness={0.6} emissive="#b47bff" emissiveIntensity={0.5} />
+      <meshStandardMaterial
+        side={DoubleSide}
+        roughness={0.6}
+        emissive={season.cascadeEmissive}
+        emissiveIntensity={0.45}
+      />
     </instancedMesh>
   );
 }

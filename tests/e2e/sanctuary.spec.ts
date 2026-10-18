@@ -151,3 +151,76 @@ test.describe("hidden charms", () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe("time, season and small interactions", () => {
+  test("shows the real lunar date, solar term and moon phase", async ({ page }) => {
+    const errors = collectErrors(page);
+    await gotoReady(page);
+    const line = page.getByTestId("sky-line");
+    await expect(line).toBeVisible();
+    // Four facts, separated by middots.
+    const text = await line.innerText();
+    expect(text.split("·").length).toBeGreaterThanOrEqual(4);
+    await expect(line).toHaveAttribute("data-season", /spring|summer|autumn|winter/);
+    await expect(line).toHaveAttribute("data-mood", /dusk|night|deepNight|dawn|day/);
+    expect(errors).toEqual([]);
+  });
+
+  test("the season and hour overrides repaint the sanctuary", async ({ page }) => {
+    await gotoReady(page, "/?sky=winter&hour=5");
+    const line = page.getByTestId("sky-line");
+    await expect(line).toHaveAttribute("data-season", "winter");
+    await expect(line).toHaveAttribute("data-mood", "dawn");
+    await page.waitForTimeout(2500);
+    await page.screenshot({ path: "test-results/sanctuary-winter-dawn.png" });
+  });
+
+  test("a wish releases a lantern, stays local, and survives a reload", async ({ page }) => {
+    const errors = collectErrors(page);
+    const bodies: string[] = [];
+    page.on("request", (r) => {
+      const data = r.postData();
+      if (data) bodies.push(data);
+    });
+    await gotoReady(page);
+    await expect(page.getByTestId("wish-count")).toHaveCount(0);
+    await page.getByTestId("wish-open").click();
+
+    // An empty wish is refused.
+    await page.getByRole("button", { name: "Set it adrift" }).click();
+    await expect(page.getByText("Write something first.")).toBeVisible();
+
+    await page.getByTestId("wish-form").locator("input").fill("  let me be patient  ");
+    await page.getByRole("button", { name: "Set it adrift" }).click();
+    await expect(page.getByText("Your lantern is drifting out across the water.")).toBeVisible();
+    await expect(page.getByTestId("wish-count")).toContainText("1 of your lanterns");
+
+    // The wish never leaves the browser.
+    expect(bodies.filter((b) => b.includes("patient"))).toEqual([]);
+    expect(await page.evaluate(() => localStorage.getItem("mts-wishes"))).toContain("let me be patient");
+
+    await page.reload();
+    await expect(page.locator("[data-world-ready=true] canvas")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("wish-count")).toContainText("1 of your lanterns");
+
+    // Clearing forgets it.
+    await page.getByTestId("wish-open").click();
+    await page.getByRole("button", { name: "Clear my lanterns" }).click();
+    await expect(page.getByTestId("wish-count")).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
+  test("clicking the water ripples without disturbing the page", async ({ page }) => {
+    const errors = collectErrors(page);
+    await gotoReady(page);
+    const box = await page.locator("canvas").boundingBox();
+    if (!box) throw new Error("no canvas");
+    // Low on the canvas is open water in front of the terrace.
+    await page.mouse.click(box.x + box.width * 0.52, box.y + box.height * 0.68);
+    await expect(page.locator("main")).toHaveAttribute("data-view", "sanctuary");
+    await expect(page.getByTestId("blessing")).toHaveCount(0);
+    await page.getByRole("button", { name: /Tarot Garden/ }).click();
+    await expect(page.locator("main")).toHaveAttribute("data-view", "tarot");
+    expect(errors).toEqual([]);
+  });
+});

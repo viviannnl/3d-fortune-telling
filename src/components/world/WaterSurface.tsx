@@ -12,7 +12,10 @@ import {
   type Mesh,
   type MeshStandardMaterial,
 } from "three";
+import { playSound } from "@/lib/audio/engine";
+import { emitRipple } from "./garden/ripplePool";
 import { useQuality } from "./quality";
+import { useSkyLook } from "./skyContext";
 
 /**
  * Tileable ripple normal map from many randomly oriented integer-frequency waves.
@@ -65,6 +68,7 @@ function createRippleNormals(size = 256): DataTexture {
 }
 
 export function WaterSurface({ reducedMotion, resolution = 512 }: { reducedMotion: boolean; resolution?: number }) {
+  const { mood } = useSkyLook();
   // The low tier skips the real-time reflection pass, which re-renders the whole scene.
   const low = useQuality() === "low";
   const normals = useMemo(() => createRippleNormals(), []);
@@ -72,8 +76,10 @@ export function WaterSurface({ reducedMotion, resolution = 512 }: { reducedMotio
   const normalScale = useMemo(() => new Vector2(0.17, 0.17), []);
 
   const mesh = useRef<Mesh>(null);
+  const clock = useRef(0);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
+    clock.current = state.clock.elapsedTime;
     const map = (mesh.current?.material as MeshStandardMaterial | undefined)?.normalMap;
     if (reducedMotion || !map) return;
     map.offset.x += delta * 0.004;
@@ -81,11 +87,27 @@ export function WaterSurface({ reducedMotion, resolution = 512 }: { reducedMotio
   });
 
   return (
-    <mesh ref={mesh} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -40]} receiveShadow={false}>
+    <mesh
+      ref={mesh}
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, 0, -40]}
+      receiveShadow={false}
+      onClick={(e) => {
+        e.stopPropagation();
+        emitRipple(e.point.x, e.point.z, clock.current);
+        playSound("ripple");
+      }}
+      onPointerOver={() => {
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = "";
+      }}
+    >
       <planeGeometry args={[420, 240]} />
       {low ? (
         <meshStandardMaterial
-          color="#26286e"
+          color={mood.water}
           metalness={0.6}
           roughness={0.4}
           normalMap={normals}
@@ -100,7 +122,7 @@ export function WaterSurface({ reducedMotion, resolution = 512 }: { reducedMotio
           mixContrast={1.0}
           mirror={0.92}
           depthScale={0}
-          color="#26286e"
+          color={mood.water}
           metalness={0.5}
           roughness={0.58}
           normalMap={normals}

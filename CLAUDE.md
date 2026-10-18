@@ -26,6 +26,7 @@ Working display name: **Moonlit Sanctuary · 月影圣所** (change in `src/lib/
 | `npm run lint` | ESLint (flat config, `eslint-config-next`) |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm test` | Vitest unit tests |
+| `npm run dev` + `?sky=winter&hour=5` | Preview any season / time of day for visual review |
 | `npm run test:e2e` | Playwright; builds and serves prod on port 3100 with the mock AI provider |
 | `npm run format` | Prettier |
 | `node scripts/qa/{shoot,tarot-flow,destiny-flow}.mjs <url> <outDir>` | Screenshot walkthroughs for visual review |
@@ -40,6 +41,8 @@ src/
   components/
     world/             3D presentation only (R3F). WorldStage = loader/fallback host,
                        WorldCanvas = owns the WebGL context, WorldScene = scene graph.
+      garden/          Terrace, flora, wisteria, water effects, wish lanterns, far shore.
+      charms/          Clickable hidden charms and their sparkle bursts.
     ui/                HTML overlay UI (shell, controls). Accessible, readable text lives here.
     tarot/             3D cards/spread + HTML controls and reading panel.
     destiny/           Form, chart panel, explanations, armillary + Five Elements 3D.
@@ -49,10 +52,13 @@ src/
     destiny/           Bazi engine (engine.ts), time zones, conventions, validation, reference notes, visual mapping.
     interpretation/    Request/response Zod schemas, prompt builders, output validation.
     share/             Share-card content (privacy-filtered).
+    sky/               Real moon phase, lunar date, solar term, season, mood palettes.
+    wishes/            Wish text normalization and storage shape (local only).
   server/              Server-only: AI providers, request handler, rate limiter, route factory.
   app/api/interpret/   POST route handlers (tarot, destiny).
   lib/                 Cross-cutting utilities: i18n, palette, audio engine, WebGL detection, hooks.
-  stores/              zustand stores: experience (view/hover/dim/camera), tarot, destiny, interpretations, preferences.
+  stores/              zustand stores: experience (view/hover/dim/camera), tarot, destiny,
+                       interpretations, preferences, charms (blessings), wishes (local lanterns).
 tests/
   unit/                Vitest — domain logic and pure utilities.
   e2e/                 Playwright — real browser flows, console-error checks, screenshots.
@@ -69,6 +75,12 @@ Rules:
 - **Don't add libraries** without a clear need. GSAP only for genuinely complex sequenced transitions.
 
 - **Next 16 Activity:** inactive routes are hidden, not unmounted. `useRouteActivation()` gates the WebGL canvas so a hidden route releases its context. R3F's own `forceContextLoss` on unmount must not be treated as a runtime context loss (see `WorldCanvas`).
+- **The sky is real.** `features/sky/celestial.ts` derives moon phase, lunar date, solar term,
+  season and time-of-day mood from the actual date; `skyContext` fans the resulting palettes out
+  to sky, water, flora and shore. Moon phase is verified against 498 Hong Kong Observatory
+  instants. Preview any look with `?sky=<season>&hour=<0-23>`.
+- **Wishes never leave the browser.** Stored in `localStorage` only; no request carries them and
+  no reading reads them. The same rule as birth data.
 - **Bazi convention** is documented once in `src/features/destiny/conventions.ts` (sent to the AI) and mirrored in localized copy on `/about#bazi`; keep them in sync. Never let an LLM derive pillars.
 - **AI requests**: the server recomputes charts and looks up card meanings itself; clients send only ids/birth input. Responses echo a `subject` that the client checks against the screen. Never log request bodies.
 

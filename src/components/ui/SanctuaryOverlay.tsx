@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { ArmillaryGlyph, TarotGlyph } from "./icons";
+import { WishPanel } from "./WishPanel";
 import { playSound } from "@/lib/audio/engine";
 import { useDictionary } from "@/lib/i18n/useDictionary";
 import { format } from "@/lib/i18n/dictionaries";
@@ -36,6 +37,10 @@ export function SanctuaryOverlay() {
           ✦ {found >= CHARMS.length ? t.charms.allFound : format(t.charms.progress, { n: found, total: CHARMS.length })}
         </p>
       )}
+
+      <div className="mx-auto mt-3 flex justify-center">
+        <WishPanel />
+      </div>
 
       <nav
         aria-label={t.destinations.navLabel}

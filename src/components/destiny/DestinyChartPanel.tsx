@@ -8,6 +8,7 @@ import { destinyShareContent } from "@/features/share/content";
 import { useInterpretations } from "@/stores/interpretations";
 import { Button } from "@/components/ui/Button";
 import { ELEMENT_COUNT_NOTE } from "@/features/destiny/reference";
+import { termMarkForBranch } from "@/features/destiny/solarTermWheel";
 import { ELEMENTS, stemByChar, branchByChar } from "@/features/destiny/symbols";
 import { PILLAR_KEYS, type Pillar } from "@/features/destiny/types";
 import { format } from "@/lib/i18n/dictionaries";
@@ -93,6 +94,7 @@ export function DestinyChartPanel() {
     },
     [locale, aiSummary],
   );
+  const birthTerm = termMarkForBranch(chart?.pillars.month.branch ?? "");
   if (!chart) return null;
 
   const max = Math.max(1, ...Object.values(chart.elementCounts));
@@ -215,6 +217,7 @@ export function DestinyChartPanel() {
             {chart.trueSolar.hourPillarWouldDiffer && <span className="text-text">{t.chart.trueSolarDiffer}</span>}
           </p>
         )}
+        {birthTerm && <p data-testid="birth-term">{format(t.chart.bornUnder, { term: birthTerm.term })}</p>}
         <Link href="/about#bazi" className="self-start underline decoration-border underline-offset-4 hover:text-text">
           {t.chart.method}
         </Link>

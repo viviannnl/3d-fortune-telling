@@ -146,4 +146,28 @@ test.describe("tarot reading", () => {
     // Only the expected 404s; no crashes.
     expect(errors.filter((e) => !/404|Failed to load resource/.test(e))).toEqual([]);
   });
+
+  test("a drawn card can be examined up close, and Escape closes only the card", async ({ page }) => {
+    await enterGarden(page);
+    await page.getByRole("button", { name: /^Love/ }).click();
+    for (let i = 0; i < 3; i++) await page.getByRole("button", { name: "Draw a card for me" }).click();
+    await revealAll(page);
+    await page.getByRole("button", { name: "Read the interpretation" }).click();
+
+    const first = page.getByRole("complementary").locator("li[data-card-id]").first();
+    const cardId = await first.getAttribute("data-card-id");
+    await first.getByTestId("card-detail-open").click();
+
+    const detail = page.getByTestId("card-detail");
+    await expect(detail).toBeVisible();
+    await expect(detail).toHaveAttribute("data-card-id", cardId ?? "");
+    // The artwork and the curated meaning are both shown at a readable size.
+    await expect(detail.getByRole("img")).toBeVisible();
+    expect((await detail.innerText()).length).toBeGreaterThan(80);
+
+    await page.keyboard.press("Escape");
+    await expect(detail).toHaveCount(0);
+    await expect(page.getByRole("complementary")).toBeVisible();
+    await expect(page.locator("main")).toHaveAttribute("data-view", "tarot");
+  });
 });

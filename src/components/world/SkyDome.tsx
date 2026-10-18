@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
-import { BackSide, Color, Vector3 } from "three";
-import { PALETTE } from "@/lib/palette";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { BackSide, Color, Vector3, type ShaderMaterial } from "three";
 import { MOON } from "./layout";
 import { useQuality } from "./quality";
+import { useSkyLook } from "./skyContext";
 import { SIMPLEX_3D } from "./shaders/noise";
 
 const vertexShader = /* glsl */ `
@@ -23,6 +24,8 @@ uniform vec3 uNebulaA;
 uniform vec3 uNebulaB;
 uniform vec3 uNebulaC;
 uniform vec3 uMoonDir;
+uniform vec3 uWarm;
+uniform float uWarmth;
 varying vec3 vDir;
 
 void main() {
@@ -47,6 +50,10 @@ void main() {
   float dust = smoothstep(0.1, 0.6, fbm(dir * 3.6 + warp * 2.0 + 13.0)) * band;
   col *= 1.0 - dust * 0.35;
 
+  // Dusk and dawn warm the band just above the horizon.
+  float low = exp(-pow(max(dir.y, 0.0) * 5.5, 2.0)) * smoothstep(-0.12, 0.05, dir.y);
+  col = mix(col, uWarm, low * uWarmth * 0.55);
+
   // Broad, soft moon glow in the atmosphere.
   float m = max(dot(dir, uMoonDir), 0.0);
   col += uNebulaB * (pow(m, 24.0) * 0.2 + pow(m, 6.0) * 0.02);
@@ -58,22 +65,54 @@ void main() {
 
 export function SkyDome() {
   const low = useQuality() === "low";
+  const { mood } = useSkyLook();
   const uniforms = useMemo(
     () => ({
-      uZenith: { value: new Color("#0b0f3a") },
-      uHorizon: { value: new Color("#3a2470") },
-      uNebulaA: { value: new Color("#7a3fd0") },
-      uNebulaB: { value: new Color(PALETTE.lavender) },
-      uNebulaC: { value: new Color("#3557c8") },
+      uZenith: { value: new Color(mood.zenith) },
+      uHorizon: { value: new Color(mood.horizon) },
+      uNebulaA: { value: new Color(mood.nebulaA) },
+      uNebulaB: { value: new Color(mood.nebulaB) },
+      uNebulaC: { value: new Color(mood.nebulaC) },
+      uWarm: { value: new Color(mood.nebulaB) },
+      uWarmth: { value: mood.horizonWarmth },
       uMoonDir: { value: new Vector3(...MOON.position).normalize() },
     }),
+    // Built once; the effect below retints without rebuilding the material.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  const target = useMemo(
+    () => ({
+      zenith: new Color(mood.zenith),
+      horizon: new Color(mood.horizon),
+      nebulaA: new Color(mood.nebulaA),
+      nebulaB: new Color(mood.nebulaB),
+      nebulaC: new Color(mood.nebulaC),
+    }),
+    [mood],
+  );
+
+  // Cross-fade toward the current mood so the sky shifts gently over the hour.
+  const material = useRef<ShaderMaterial>(null);
+  useFrame((_, delta) => {
+    const u = material.current?.uniforms;
+    if (!u) return;
+    const k = Math.min(1, delta * 0.6);
+    u.uZenith.value.lerp(target.zenith, k);
+    u.uHorizon.value.lerp(target.horizon, k);
+    u.uNebulaA.value.lerp(target.nebulaA, k);
+    u.uNebulaB.value.lerp(target.nebulaB, k);
+    u.uNebulaC.value.lerp(target.nebulaC, k);
+    u.uWarm.value.lerp(target.nebulaB, k);
+    u.uWarmth.value += (mood.horizonWarmth - u.uWarmth.value) * k;
+  });
 
   return (
     <mesh renderOrder={-10} frustumCulled={false}>
       <sphereGeometry args={[400, 48, 32]} />
       <shaderMaterial
+        ref={material}
         uniforms={uniforms}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}

@@ -15,6 +15,7 @@ import {
 } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useQuality } from "../quality";
+import { useSkyLook } from "../skyContext";
 import { applyInstances, rng, type Instance } from "./scatter";
 
 let raceme: BufferGeometry | null = null;
@@ -55,14 +56,17 @@ function leaf() {
   return leafGeo;
 }
 
-const COLORS = ["#ffffff", "#f1ebff", "#e6dcff", "#fff3fb"];
-
 interface Strand extends Instance {
   phase: number;
   length: number;
 }
 
-function strands(side: -1 | 1, seed: number, count: number): { flowers: Strand[]; leaves: Instance[] } {
+function strands(
+  side: -1 | 1,
+  seed: number,
+  count: number,
+  leafColors: readonly string[],
+): { flowers: Strand[]; leaves: Instance[] } {
   const r = rng(seed);
   const flowers: Strand[] = [];
   const leaves: Instance[] = [];
@@ -77,7 +81,7 @@ function strands(side: -1 | 1, seed: number, count: number): { flowers: Strand[]
       position: [x, y, z],
       rotation: [(r() - 0.5) * 0.15, r() * 6.3, (r() - 0.5) * 0.15],
       scale: [1, length, 1],
-      color: COLORS[Math.floor(r() * COLORS.length)],
+      color: "#ffffff",
       phase: r() * 6.3,
       length,
     });
@@ -86,7 +90,7 @@ function strands(side: -1 | 1, seed: number, count: number): { flowers: Strand[]
         position: [x + (r() - 0.5) * 0.5, y + 0.1 + r() * 0.3, z + (r() - 0.5) * 0.5],
         rotation: [(r() - 0.5) * 1.2, r() * 6.3, (r() - 0.5) * 1.2],
         scale: 0.8 + r() * 0.8,
-        color: r() > 0.5 ? "#24564f" : "#2a4d63",
+        color: leafColors[Math.floor(r() * leafColors.length)],
       });
     }
   }
@@ -101,13 +105,14 @@ const s = new Vector3();
 
 /** Wisteria cascading into the top corners of the frame, swaying very slightly. */
 export function Wisteria({ reducedMotion }: { reducedMotion: boolean }) {
+  const { season } = useSkyLook();
   const low = useQuality() === "low";
   const data = useMemo(() => {
     const n = low ? 32 : 72;
-    const L = strands(-1, 5, n);
-    const R = strands(1, 9, n);
+    const L = strands(-1, 5, n, season.leaves);
+    const R = strands(1, 9, n, season.leaves);
     return { flowers: [...L.flowers, ...R.flowers], leaves: [...L.leaves, ...R.leaves] };
-  }, [low]);
+  }, [low, season]);
   const flowers = useRef<InstancedMesh>(null);
   const leaves = useRef<InstancedMesh>(null);
 
@@ -135,10 +140,10 @@ export function Wisteria({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <group>
       <instancedMesh ref={leaves} args={[leaf(), undefined, data.leaves.length]} frustumCulled={false}>
-        <meshStandardMaterial roughness={0.7} emissive="#103a3a" emissiveIntensity={0.5} />
+        <meshStandardMaterial roughness={0.7} emissive="#103a3a" emissiveIntensity={0.45} />
       </instancedMesh>
       <instancedMesh ref={flowers} args={[racemeGeometry(), undefined, data.flowers.length]} frustumCulled={false}>
-        <meshStandardMaterial vertexColors roughness={0.5} emissive="#a46cff" emissiveIntensity={0.95} />
+        <meshStandardMaterial vertexColors roughness={0.5} emissive={season.cascadeEmissive} emissiveIntensity={0.95} />
       </instancedMesh>
     </group>
   );

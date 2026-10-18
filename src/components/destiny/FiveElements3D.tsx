@@ -20,7 +20,7 @@ import { elementVisual } from "@/features/destiny/visualMapping";
 import type { ChartResult } from "@/features/destiny/types";
 import { MUTED_GOLD } from "@/components/world/materials";
 import { registerAnchor } from "@/components/world/labelRegistry";
-import { playSound } from "@/lib/audio/engine";
+import { playElementTone } from "@/lib/audio/engine";
 import { useDestiny } from "@/stores/destiny";
 import { ELEMENT_COLOR } from "./elementStyle";
 
@@ -265,7 +265,7 @@ function ElementObject({ element, count, dayMaster, revealAt, index, interactive
     const { select, selection } = useDestiny.getState();
     const isSame = selection?.kind === "element" && selection.id === element;
     select(isSame ? null : { kind: "element", id: element });
-    playSound("select");
+    playElementTone(element);
   };
 
   return (
