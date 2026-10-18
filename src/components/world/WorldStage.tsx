@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { useDictionary } from "@/lib/i18n/useDictionary";
 import { useRouteActivation } from "@/lib/useRouteActive";
 import { isWebGLAvailable } from "@/lib/webgl";
+import { useIntro } from "@/stores/intro";
 import { SkyFallback } from "./SkyFallback";
 import { WorldErrorBoundary } from "./WorldErrorBoundary";
 
@@ -42,6 +43,11 @@ export function WorldStage() {
   const [canvasKey, setCanvasKey] = useState(0);
   const [lost, setLost] = useState(false);
   const handleLost = useCallback(() => setLost(true), []);
+  // The entrance waits for the world, or goes straight on if there will be none.
+  useEffect(() => {
+    if (ready) useIntro.getState().settle();
+    else if (webgl === false || lost) useIntro.getState().settle(true);
+  }, [ready, webgl, lost]);
   const restore = () => {
     setLost(false);
     setReadyActivation(0);

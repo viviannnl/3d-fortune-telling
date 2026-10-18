@@ -41,7 +41,15 @@ function panned(ac: Ctx, out: AudioNode, pan: number): AudioNode {
  * One pad note: two detuned voices, a slow swell in and a long release, so
  * consecutive chords cross-fade into each other.
  */
-export function padNote(ac: Ctx, out: AudioNode, midi: number, at: number, seconds: number, level: number, pan: number) {
+export function padNote(
+  ac: Ctx,
+  out: AudioNode,
+  midi: number,
+  at: number,
+  seconds: number,
+  level: number,
+  pan: number,
+) {
   const attack = Math.min(3.5, seconds * 0.35);
   const release = 4.5;
   const end = at + seconds + release;
@@ -170,7 +178,10 @@ function pluck(
   g.gain.setValueAtTime(0, at);
   g.gain.linearRampToValueAtTime(level, at + 0.004);
   g.gain.exponentialRampToValueAtTime(0.0001, at + decay);
-  osc.connect(filter).connect(g).connect(panned(ac, out, pan));
+  osc
+    .connect(filter)
+    .connect(g)
+    .connect(panned(ac, out, pan));
   osc.start(at);
   osc.stop(at + decay + 0.05);
 }

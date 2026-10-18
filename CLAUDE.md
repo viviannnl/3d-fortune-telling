@@ -85,6 +85,12 @@ Rules:
   ahead of the audio clock; `instruments.ts` synthesizes it. Interface cues snap to the current
   key. Levels were set by measuring offline renders (`renderMusicOffline`, exposed as
   `window.__renderMusic` in dev only): about −26 LUFS, peaks below −11 dBFS.
+- **The entrance** (`stores/intro.ts`): a moon gate (HTML, `IntroGate`) → a descent driven by
+  `introProgress()`, which camera, stars, moon, grade, glints, lanterns and fireflies read in
+  `useFrame` → the interface fades in → `IntroGreeting`. Once per session (sessionStorage
+  `mts-intro`, mirrored to `<html data-intro>` by an inline head script so the gate never
+  flashes); later loads get a 2.4 s version. Any click/key hurries it; reduced motion skips it.
+  E2E helpers mark the gate as passed (`skipGate`, `gotoReady`); `intro.spec.ts` covers it.
 - **Wishes never leave the browser.** Stored in `localStorage` only; no request carries them and
   no reading reads them. The same rule as birth data.
 - **Bazi convention** is documented once in `src/features/destiny/conventions.ts` (sent to the AI) and mirrored in localized copy on `/about#bazi`; keep them in sync. Never let an LLM derive pillars.

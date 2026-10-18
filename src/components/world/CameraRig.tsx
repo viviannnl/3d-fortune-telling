@@ -4,10 +4,14 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MathUtils, PerspectiveCamera, Vector3 } from "three";
 import { useExperience } from "@/stores/experience";
+import { introProgress, ramp } from "@/stores/intro";
 import { CAMERA_POSES } from "./layout";
 
 const TRAVEL_LAMBDA = 1.3; // ≈ 2 s to settle between destinations
 const PARALLAX_LAMBDA = 2.6;
+/** The entrance starts a little behind the terrace gazing up at the sky, then glides in and lowers its gaze to the water. */
+const INTRO_FROM = new Vector3(0, 5.2, 25);
+const INTRO_LOOK = new Vector3(0, 24, -95);
 
 /**
  * Controlled cinematic camera: eases between per-view poses and adds gentle
@@ -18,6 +22,7 @@ export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const look = useRef(new Vector3(...CAMERA_POSES.sanctuary.target));
   const offset = useRef({ x: 0, y: 0 });
   const scratch = useRef(new Vector3());
+  const introLook = useRef(new Vector3());
 
   const lastAspect = useRef(0);
 
@@ -60,6 +65,14 @@ export function CameraRig({ reducedMotion }: { reducedMotion: boolean }) {
     look.current.x = MathUtils.damp(look.current.x, t.x, travel, dt);
     look.current.y = MathUtils.damp(look.current.y, t.y, travel, dt);
     look.current.z = MathUtils.damp(look.current.z, t.z, travel, dt);
+
+    // The entrance: glide down from the sky onto the rig's pose, slow at both ends.
+    const k = ramp(introProgress(), 0.04, 0.95);
+    if (k < 1) {
+      camera.position.lerpVectors(INTRO_FROM, camera.position, k);
+      camera.lookAt(introLook.current.lerpVectors(INTRO_LOOK, look.current, k));
+      return;
+    }
     camera.lookAt(look.current);
   });
 

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { expect, test, type Download, type Page } from "@playwright/test";
-import { collectErrors, gotoReady } from "./helpers";
+import { collectErrors, gotoReady, skipGate } from "./helpers";
 
 test.use({ locale: "en-US" });
 test.describe.configure({ timeout: 120_000 });
@@ -106,6 +106,7 @@ test.describe("without WebGL", () => {
         },
       });
     });
+    await skipGate(page);
     await page.goto("/");
     await expect(page.getByText(/needs WebGL/)).toBeVisible();
     await quickTarot(page);

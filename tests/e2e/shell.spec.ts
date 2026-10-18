@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
-import { collectErrors } from "./helpers";
+import { collectErrors, skipGate } from "./helpers";
 
 test.describe("application shell", () => {
   test.use({ locale: "en-US" });
 
   test("renders the shell and a live WebGL canvas without errors", async ({ page }) => {
     const errors = collectErrors(page);
+    await skipGate(page);
     await page.goto("/");
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Where the moon keeps its counsel/);
@@ -18,6 +19,7 @@ test.describe("application shell", () => {
   });
 
   test("language toggle switches copy, html lang, and persists across reload", async ({ page }) => {
+    await skipGate(page);
     await page.goto("/");
     const zh = page.getByRole("button", { name: "中文" });
     await zh.click();
@@ -34,6 +36,7 @@ test.describe("application shell", () => {
   });
 
   test("language toggle is keyboard operable", async ({ page }) => {
+    await skipGate(page);
     await page.goto("/");
     const zh = page.getByRole("button", { name: "中文" });
     for (let i = 0; i < 6 && !(await zh.evaluate((el) => el === document.activeElement)); i++) {
@@ -49,6 +52,7 @@ test.describe("browser language detection", () => {
   test.use({ locale: "zh-CN" });
 
   test("defaults to Chinese when the browser prefers it", async ({ page }) => {
+    await skipGate(page);
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/月光守候着它的箴言/);
   });
@@ -65,6 +69,7 @@ test.describe("WebGL unavailable", () => {
         },
       });
     });
+    await skipGate(page);
     await page.goto("/");
     await expect(page.getByText(/needs WebGL/)).toBeVisible();
     await expect(page.locator("canvas")).toHaveCount(0);
@@ -86,6 +91,7 @@ test.describe("3D scene crash", () => {
       });
     });
     const errors = collectErrors(page);
+    await skipGate(page);
     await page.goto("/");
     await expect(page.getByText(/needs WebGL/)).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText("The sky is gathering")).toHaveCount(0);

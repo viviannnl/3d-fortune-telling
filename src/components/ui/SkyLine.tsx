@@ -1,25 +1,35 @@
 "use client";
 
+import { useId } from "react";
 import { MOON_PHASE_NAMES } from "@/features/sky/celestial";
 import { format } from "@/lib/i18n/dictionaries";
 import { useDictionary } from "@/lib/i18n/useDictionary";
 import { usePreferences } from "@/stores/preferences";
 import { useSky } from "@/components/world/useSky";
 
-/** Tiny crescent/disc that mirrors the real phase. */
-function PhaseGlyph({ illumination, waxing }: { illumination: number; waxing: boolean }) {
+/** Crescent/disc that mirrors the real phase. */
+export function PhaseGlyph({
+  illumination,
+  waxing,
+  className = "size-3.5",
+}: {
+  illumination: number;
+  waxing: boolean;
+  className?: string;
+}) {
+  const mask = useId();
   // Offset a shadow disc across the lit disc; direction follows waxing/waning.
   const shift = (1 - illumination) * 2 * (waxing ? 1 : -1);
   return (
-    <svg viewBox="-1.2 -1.2 2.4 2.4" aria-hidden className="size-3.5 overflow-visible">
+    <svg viewBox="-1.2 -1.2 2.4 2.4" aria-hidden className={`overflow-visible ${className}`}>
       <defs>
-        <mask id="moon-phase-mask">
+        <mask id={mask}>
           <circle r="1" fill="#fff" />
           <circle r="1.02" cx={shift} fill="#000" />
         </mask>
       </defs>
       <circle r="1" fill="currentColor" opacity={0.22} />
-      <circle r="1" fill="currentColor" mask="url(#moon-phase-mask)" />
+      <circle r="1" fill="currentColor" mask={`url(#${mask})`} />
     </svg>
   );
 }

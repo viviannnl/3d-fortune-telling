@@ -109,6 +109,25 @@
       opacity: 0.45;
     }
   }
+  @keyframes gate-breathe {
+    50% {
+      box-shadow:
+        0 0 70px 6px rgb(188 166 245 / 0.32),
+        inset 0 0 60px 4px rgb(188 166 245 / 0.18);
+    }
+  }
+  @keyframes letter-in {
+    from {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translateY(3px);
+    }
+  }
+}
+
+/* A later load in the same session skips the gate; set before paint by an inline script. */
+html[data-intro="seen"] .intro-gate {
+  display: none;
 }
 
 html,

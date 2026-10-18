@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, type Points, type ShaderMaterial } from "three";
 import { PALETTE } from "@/lib/palette";
 import { useExperience } from "@/stores/experience";
+import { introProgress } from "@/stores/intro";
 
 interface StarLayer {
   count: number;
@@ -26,12 +27,17 @@ uniform float uTime;
 uniform float uSize;
 uniform float uTwinkle;
 uniform float uPixelRatio;
+uniform float uReveal;
+uniform float uLead;
 varying float vAlpha;
 varying float vSeed;
 void main() {
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   float tw = 1.0 - uTwinkle * (0.5 + 0.5 * sin(uTime * (0.6 + aSeed * 1.7) + aSeed * 40.0));
-  vAlpha = (0.35 + 0.65 * fract(aSeed * 7.31)) * tw;
+  // The entrance: each star lights at its own moment, with a brief flare as it does.
+  float th = fract(aSeed * 91.7) * 0.4 - uLead;
+  float lit = smoothstep(th, th + 0.07, uReveal);
+  vAlpha = (0.35 + 0.65 * fract(aSeed * 7.31)) * tw * lit * (1.0 + 2.2 * lit * (1.0 - lit));
   vSeed = aSeed;
   gl_PointSize = uSize * uPixelRatio * (0.6 + fract(aSeed * 3.7));
   gl_Position = projectionMatrix * mv;
@@ -89,10 +95,13 @@ function StarLayerPoints({ layer, index, reducedMotion }: { layer: StarLayer; in
       uTwinkle: { value: reducedMotion ? 0 : layer.twinkle },
       uPixelRatio: { value: 1 },
       uDim: { value: 0 },
+      uReveal: { value: 0 },
+      // A handful of bright stars are already out at the gate.
+      uLead: { value: index === LAYERS.length - 1 ? 0.12 : 0.02 },
       uColorA: { value: new Color(PALETTE.moonlight) },
       uColorB: { value: new Color(PALETTE.paleBlue) },
     }),
-    [layer, reducedMotion],
+    [layer, index, reducedMotion],
   );
 
   useFrame((state, delta) => {
@@ -100,6 +109,7 @@ function StarLayerPoints({ layer, index, reducedMotion }: { layer: StarLayer; in
     if (!m) return;
     m.uniforms.uTime.value = state.clock.elapsedTime;
     m.uniforms.uPixelRatio.value = state.viewport.dpr;
+    m.uniforms.uReveal.value = introProgress();
     const dim = useExperience.getState().dim;
     m.uniforms.uDim.value += (dim - m.uniforms.uDim.value) * Math.min(1, delta * 2);
     if (!reducedMotion && points.current) points.current.rotation.y += delta * 0.0025 * (index + 1);

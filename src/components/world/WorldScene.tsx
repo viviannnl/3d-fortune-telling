@@ -36,6 +36,7 @@ import { HorizonRidges } from "./HorizonRidges";
 import { LotusLanterns } from "./LotusLanterns";
 import { Mist } from "./Mist";
 import { Motes } from "./Motes";
+import { IntroRise } from "./IntroRise";
 
 interface WorldSceneProps {
   reducedMotion: boolean;
@@ -103,13 +104,15 @@ export function WorldScene({ reducedMotion, quality }: WorldSceneProps) {
         <LabelProjector />
         <SkyDome />
         <StarField reducedMotion={reducedMotion} />
-        <Moon
-          position={MOON.position}
-          radius={MOON.radius}
-          phaseAge={sky?.moon.age}
-          illumination={sky?.moon.illumination ?? 1}
-          onMesh={setMoon}
-        />
+        <IntroRise depth={30} from={0.06} to={0.62}>
+          <Moon
+            position={MOON.position}
+            radius={MOON.radius}
+            phaseAge={sky?.moon.age}
+            illumination={sky?.moon.illumination ?? 1}
+            onMesh={setMoon}
+          />
+        </IntroRise>
         <CelestialRing reducedMotion={reducedMotion} />
         <DistantStructures reducedMotion={reducedMotion} />
         <CrystalField reducedMotion={reducedMotion} />

@@ -10,9 +10,12 @@ import {
   Object3D,
   SphereGeometry,
   type InstancedMesh,
+  type MeshBasicMaterial,
   type Points,
+  type PointsMaterial,
 } from "three";
 import { PALETTE } from "@/lib/palette";
+import { introProgress, ramp } from "@/stores/intro";
 import { glowTexture } from "./glowTexture";
 
 interface Lantern {
@@ -125,8 +128,14 @@ export function LotusLanterns({ reducedMotion }: { reducedMotion: boolean }) {
     placeLanterns(petals.current, cores.current, glowGeo, dummy, 0);
   }, [glowGeo, dummy]);
 
+  const glowMat = useRef<PointsMaterial>(null);
+  const coreMat = useRef<MeshBasicMaterial>(null);
   useFrame((state) => {
     if (!reducedMotion) placeLanterns(petals.current, cores.current, glowGeo, dummy, state.clock.elapsedTime);
+    // The entrance: the floating lanterns kindle just after the terrace's.
+    const lit = ramp(introProgress(), 0.62, 0.86);
+    if (glowMat.current) glowMat.current.opacity = 0.7 * lit;
+    if (coreMat.current) coreMat.current.color.setRGB(1, 0.945, 0.84).multiplyScalar(0.15 + 0.85 * lit);
   });
 
   return (
@@ -135,10 +144,11 @@ export function LotusLanterns({ reducedMotion }: { reducedMotion: boolean }) {
         <meshStandardMaterial roughness={0.45} emissive={PALETTE.lavender} emissiveIntensity={0.2} />
       </instancedMesh>
       <instancedMesh ref={cores} args={[coreGeo, undefined, LANTERNS.length]} frustumCulled={false}>
-        <meshBasicMaterial color="#fff1d6" toneMapped={false} />
+        <meshBasicMaterial ref={coreMat} color="#fff1d6" toneMapped={false} />
       </instancedMesh>
       <points ref={glows} geometry={glowGeo} frustumCulled={false}>
         <pointsMaterial
+          ref={glowMat}
           map={glowTexture()}
           color="#ffe6c4"
           size={1.4}

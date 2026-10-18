@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter, Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
+import { INTRO_SEEN_KEY } from "@/lib/introKey";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -40,8 +41,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html
       lang="en"
+      // The inline script below may set data-intro before React hydrates.
+      suppressHydrationWarning
       className={`${cormorant.variable} ${inter.variable} ${notoSerifSC.variable} ${notoSansSC.variable}`}
     >
+      <head>
+        <script
+          // Hides the entrance gate before first paint when it was already passed this session.
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("${INTRO_SEEN_KEY}")==="seen")document.documentElement.dataset.intro="seen"}catch(e){}`,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -2,8 +2,9 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { AdditiveBlending, type Sprite, type SpriteMaterial } from "three";
+import { AdditiveBlending, Vector3, type MeshStandardMaterial, type Sprite, type SpriteMaterial } from "three";
 import { useCharms, type CharmId } from "@/stores/charms";
+import { introProgress, ramp } from "@/stores/intro";
 import type { Vec3 } from "./layout";
 import { glowTexture } from "./glowTexture";
 import { ANTIQUE_SILVER, CHAMPAGNE, FROSTED } from "./materials";
@@ -39,16 +40,28 @@ export function Lantern({
   const post = useLathe(POST, 20);
   const glow = useRef<SpriteMaterial>(null);
   const sprite = useRef<Sprite>(null);
+  const body = useRef<MeshStandardMaterial>(null);
+  /** When this lantern lights during the entrance: far ones first, then toward the viewer. */
+  const lightAt = useRef<number | null>(null);
   useFrame((state) => {
     const g = glow.current;
     if (!g) return;
+    if (lightAt.current === null && sprite.current) {
+      const z = sprite.current.getWorldPosition(new Vector3()).z;
+      lightAt.current = 0.56 + 0.26 * Math.min(1, Math.max(0, (z + 12) / 22));
+    }
+    const at = lightAt.current ?? 0.6;
+    const lit = ramp(introProgress(), at, at + 0.07);
+    // A catch of flame as it lights.
+    const catching = lit > 0 && lit < 1 ? 1 + 0.5 * Math.sin(state.clock.elapsedTime * 40 + phase * 7) * (1 - lit) : 1;
     const touched = charm ? useCharms.getState().touched[charm] : undefined;
     const since = touched === undefined ? Infinity : performance.now() - touched;
     const flare = since < 1600 ? 1 - since / 1600 : 0;
     // A slow, barely perceptible breath, plus a flare when the charm is touched.
     const breath = reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.9 + phase) * 0.08;
-    g.opacity = 0.5 + breath + flare * 0.5;
-    sprite.current?.scale.setScalar(1.5 * (1 + flare * 1.2));
+    g.opacity = (0.5 + breath + flare * 0.5) * lit * catching;
+    sprite.current?.scale.setScalar(1.5 * (1 + flare * 1.2) * (0.6 + 0.4 * lit));
+    if (body.current) body.current.emissiveIntensity = 1.3 * lit * catching;
   });
   return (
     <group position={position}>
@@ -58,7 +71,7 @@ export function Lantern({
       <group position={[0, 1.27, 0]}>
         <mesh>
           <cylinderGeometry args={[0.13, 0.13, 0.3, 6]} />
-          <meshStandardMaterial {...FROSTED} emissive={color} emissiveIntensity={1.3} />
+          <meshStandardMaterial ref={body} {...FROSTED} emissive={color} emissiveIntensity={1.3} />
         </mesh>
         {[0.17, -0.17].map((y) => (
           <mesh key={y} position={[0, y, 0]}>

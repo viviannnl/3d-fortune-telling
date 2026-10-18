@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Plane, Vector3, type ShaderMaterial } from "three";
 import { PALETTE } from "@/lib/palette";
 import { useExperience } from "@/stores/experience";
+import { introProgress } from "@/stores/intro";
 import { glowTexture } from "./glowTexture";
 
 function hash(n: number) {
@@ -18,6 +19,7 @@ uniform float uTime;
 uniform float uPixelRatio;
 uniform vec3 uAttract;
 uniform float uPull;
+uniform float uReveal;
 varying float vAlpha;
 void main() {
   vec3 p = position;
@@ -33,6 +35,9 @@ void main() {
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   float fadeY = smoothstep(0.4, 1.6, p.y) * (1.0 - smoothstep(9.0, 12.4, p.y));
   vAlpha = fadeY * (0.35 + 0.65 * fract(aSeed * 7.13)) * (0.6 + 0.4 * sin(uTime * (0.8 + aSeed) + aSeed * 50.0));
+  // The entrance: they wake last, each at its own moment.
+  float th = 0.68 + fract(aSeed * 5.3) * 0.24;
+  vAlpha *= smoothstep(th, th + 0.06, uReveal);
   gl_PointSize = (0.14 + aSeed * 0.2) * uPixelRatio / -mv.z;
   gl_Position = projectionMatrix * mv;
 }
@@ -98,6 +103,7 @@ export function Motes({
       uTime: { value: 0 },
       uPixelRatio: { value: 1 },
       uDim: { value: 0 },
+      uReveal: { value: 0 },
       uAttract: { value: new Vector3(0, -100, 0) },
       uPull: { value: 0 },
       uMap: { value: glowTexture() },
@@ -123,6 +129,7 @@ export function Motes({
     if (!reducedMotion) m.uniforms.uTime.value = state.clock.elapsedTime;
     m.uniforms.uPixelRatio.value = state.viewport.dpr * (state.size.height / 2);
     m.uniforms.uDim.value += (useExperience.getState().dim - m.uniforms.uDim.value) * Math.min(1, delta * 2);
+    m.uniforms.uReveal.value = introProgress();
   });
 
   return (

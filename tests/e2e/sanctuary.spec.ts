@@ -103,6 +103,7 @@ test.describe("sound", () => {
   });
 
   test("music and effects volumes are adjustable, remembered, and Escape only closes the panel", async ({ page }) => {
+    test.setTimeout(75_000); // two loads, each with the short entrance, plus a few seconds of music
     const errors = collectErrors(page);
     await gotoReady(page);
     // The settings only exist once sound is on.

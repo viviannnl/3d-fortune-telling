@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, type ShaderMaterial } from "three";
 import { PALETTE } from "@/lib/palette";
 import { useExperience } from "@/stores/experience";
+import { introProgress } from "@/stores/intro";
 
 const COUNT = 520;
 
@@ -17,12 +18,18 @@ const vertexShader = /* glsl */ `
 attribute float aSeed;
 uniform float uTime;
 uniform float uScale;
+uniform float uReveal;
 varying float vA;
 void main() {
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   // Each glint flashes briefly and irregularly, like moonlight catching wavelets.
   float t = uTime * (0.7 + aSeed * 1.6) + aSeed * 90.0;
   vA = pow(max(sin(t), 0.0), 12.0) * (0.4 + 0.6 * fract(aSeed * 13.7));
+  // The entrance: the path lights from the moon toward the viewer, a bright front leading it.
+  float near = clamp(((modelMatrix * vec4(position, 1.0)).z + 90.0) / 100.0, 0.0, 1.0);
+  float th = 0.4 + 0.28 * near;
+  float front = smoothstep(th, th + 0.02, uReveal) * (1.0 - smoothstep(th + 0.02, th + 0.09, uReveal));
+  vA = max(vA * smoothstep(th, th + 0.05, uReveal), front * (0.5 + 0.5 * fract(aSeed * 5.1)));
   gl_PointSize = (0.05 + aSeed * 0.07) * uScale / -mv.z;
   gl_Position = projectionMatrix * mv;
 }
@@ -63,6 +70,7 @@ export function MoonGlints({ reducedMotion }: { reducedMotion: boolean }) {
       uTime: { value: 0 },
       uScale: { value: 1 },
       uDim: { value: 0 },
+      uReveal: { value: 0 },
       uColor: { value: new Color(PALETTE.moonlight) },
     }),
     [],
@@ -74,6 +82,7 @@ export function MoonGlints({ reducedMotion }: { reducedMotion: boolean }) {
     // Reduced motion: glints hold still at a soft constant level instead of flashing.
     m.uniforms.uTime.value = reducedMotion ? 1.3 : state.clock.elapsedTime;
     m.uniforms.uScale.value = state.viewport.dpr * (state.size.height / 2);
+    m.uniforms.uReveal.value = introProgress();
     m.uniforms.uDim.value += (useExperience.getState().dim - m.uniforms.uDim.value) * Math.min(1, delta * 2);
   });
 

@@ -221,7 +221,11 @@ export function playSound(name: SoundName): void {
 export async function renderMusicOffline(
   at: MusicScene,
   seconds: number,
-  { seed = 1, music = true, cues = [] }: { seed?: number; music?: boolean; cues?: { name: SoundName; at: number }[] } = {},
+  {
+    seed = 1,
+    music = true,
+    cues = [],
+  }: { seed?: number; music?: boolean; cues?: { name: SoundName; at: number }[] } = {},
 ): Promise<AudioBuffer> {
   const sampleRate = 44_100;
   const ac = new OfflineAudioContext(2, Math.ceil(sampleRate * seconds), sampleRate);

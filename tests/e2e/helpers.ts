@@ -10,9 +10,20 @@ export function collectErrors(page: Page) {
   return errors;
 }
 
+/** Marks the entrance gate as already passed this session, for tests about other things. */
+export async function skipGate(page: Page) {
+  await page.addInitScript(() => sessionStorage.setItem("mts-intro", "seen"));
+}
+
+/**
+ * Loads the page as a visitor who already passed the entrance gate this
+ * session, and waits for the world plus the short descent to finish.
+ */
 export async function gotoReady(page: Page, path = "/") {
+  await skipGate(page);
   await page.goto(path);
   await expect(page.locator("[data-world-ready=true] canvas")).toBeVisible({ timeout: 30_000 });
+  if (path === "/") await expect(page.locator("main")).toHaveAttribute("data-intro", "done", { timeout: 15_000 });
 }
 
 /** Screen point on a destination's 3D object, derived from its projected name tag. */

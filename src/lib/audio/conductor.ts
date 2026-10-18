@@ -70,7 +70,10 @@ export function createMusicGraph(ac: BaseAudioContext, out: AudioNode): MusicGra
     ambience,
     brightness,
     presence,
-    disconnect: () => [presence, reverb, wet, mix, tidy, send, brightness, pad, bass, melody, bell, ambience].forEach((n) => n.disconnect()),
+    disconnect: () =>
+      [presence, reverb, wet, mix, tidy, send, brightness, pad, bass, melody, bell, ambience].forEach((n) =>
+        n.disconnect(),
+      ),
   };
 }
 
