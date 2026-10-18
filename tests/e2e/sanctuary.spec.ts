@@ -77,7 +77,7 @@ test.describe("sound", () => {
       };
     });
     await gotoReady(page);
-    const toggle = page.getByRole("button", { name: "Sound" });
+    const toggle = page.getByRole("button", { name: "Sound", exact: true });
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
 
     // Interacting with the world must not start audio on its own.
@@ -99,7 +99,43 @@ test.describe("sound", () => {
 
     // Not persisted: a reload starts silent again.
     await page.reload();
-    await expect(page.getByRole("button", { name: "Sound" })).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByRole("button", { name: "Sound", exact: true })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  test("music and effects volumes are adjustable, remembered, and Escape only closes the panel", async ({ page }) => {
+    const errors = collectErrors(page);
+    await gotoReady(page);
+    // The settings only exist once sound is on.
+    await expect(page.getByTestId("sound-settings")).toHaveCount(0);
+    await page.getByRole("button", { name: "Sound", exact: true }).click();
+    await page.getByRole("button", { name: /Tarot Garden/ }).click();
+    await expect(page.locator("main")).toHaveAttribute("data-view", "tarot");
+
+    await page.getByTestId("sound-settings").click();
+    const music = page.getByRole("slider", { name: "Music" });
+    const effects = page.getByRole("slider", { name: "Effects" });
+    await expect(music).toBeVisible();
+    await expect(music).toHaveValue("70");
+    await music.fill("30");
+    await effects.fill("100");
+    await expect(music).toHaveAttribute("aria-valuetext", "30%");
+
+    // Escape closes the panel, not the destination.
+    await page.keyboard.press("Escape");
+    await expect(music).toBeHidden();
+    await expect(page.locator("main")).toHaveAttribute("data-view", "tarot");
+
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("mts-preferences") ?? "{}"));
+    expect(saved.state).toMatchObject({ musicVolume: 0.3, effectsVolume: 1 });
+
+    // Remembered across a reload, while sound itself starts off again.
+    await page.reload();
+    await page.getByRole("button", { name: "Sound", exact: true }).click();
+    await page.getByTestId("sound-settings").click();
+    await expect(page.getByRole("slider", { name: "Music" })).toHaveValue("30");
+    // Let the score play for a moment so scheduling errors would surface.
+    await page.waitForTimeout(4000);
+    expect(errors).toEqual([]);
   });
 });
 

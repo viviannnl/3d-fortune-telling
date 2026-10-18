@@ -80,6 +80,10 @@ const en = {
     on: "Sound on",
     off: "Sound off",
     label: "Sound",
+    settings: "Sound settings",
+    music: "Music",
+    effects: "Effects",
+    follows: "The music follows tonight’s moon, the season and where you are.",
   },
   tarot: {
     deckLabel: "Major Arcana · 22 of 78 cards",
@@ -377,6 +381,10 @@ const zh: Dictionary = {
     on: "声音开启",
     off: "声音关闭",
     label: "声音",
+    settings: "声音设置",
+    music: "音乐",
+    effects: "音效",
+    follows: "音乐随今夜的月相、时令和你所在之处而变。",
   },
   tarot: {
     deckLabel: "大阿卡那 · 共 78 张中的 22 张",

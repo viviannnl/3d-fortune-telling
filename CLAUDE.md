@@ -79,6 +79,12 @@ Rules:
   season and time-of-day mood from the actual date; `skyContext` fans the resulting palettes out
   to sky, water, flora and shore. Moon phase is verified against 498 Hong Kong Observatory
   instants. Preview any look with `?sky=<season>&hour=<0-23>`.
+- **The music is generative.** `lib/audio/score.ts` (pure, unit-tested) decides the notes: one
+  pentatonic key per season, mood sets tempo and brightness, the moon sets melody density, the
+  place sets the instrument (celesta / harp / guzheng + temple bell). `conductor.ts` schedules it
+  ahead of the audio clock; `instruments.ts` synthesizes it. Interface cues snap to the current
+  key. Levels were set by measuring offline renders (`renderMusicOffline`, exposed as
+  `window.__renderMusic` in dev only): about −26 LUFS, peaks below −11 dBFS.
 - **Wishes never leave the browser.** Stored in `localStorage` only; no request carries them and
   no reading reads them. The same rule as birth data.
 - **Bazi convention** is documented once in `src/features/destiny/conventions.ts` (sent to the AI) and mirrored in localized copy on `/about#bazi`; keep them in sync. Never let an LLM derive pillars.

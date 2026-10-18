@@ -16,6 +16,7 @@ import { SanctuaryOverlay } from "./SanctuaryOverlay";
 import { SkyLine } from "./SkyLine";
 import { WishLabels } from "./WishLabels";
 import { SoundToggle } from "./SoundToggle";
+import { AudioDirector } from "./AudioDirector";
 
 /** Full-screen root: the 3D world underneath, minimal accessible HTML on top. */
 export function AppShell() {
@@ -57,6 +58,7 @@ export function AppShell() {
             )}
           </div>
           <div className="pointer-events-auto flex flex-wrap justify-end gap-2">
+            <AudioDirector />
             <SoundToggle />
             <LanguageToggle />
           </div>
