@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens — Dreamy Celestial Fantasy.
+ * Component code must reference these (via Tailwind utilities or var()),
+ * never literal hex values. The experience is dark-only by design.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Reference palette */
+  --midnight: #17152f;
+  --deep-violet: #302448;
+  --amethyst: #55427c;
+  --lavender: #bca6f5;
+  --moonlight: #e7ddfb;
+  --pale-blue: #c5ddf8;
+  --champagne: #d9c79c; /* restrained metallic accent; 10.9:1 on midnight */
+
+  /* Semantic roles (contrast verified against --midnight / --deep-violet) */
+  --surface: var(--midnight);
+  --surface-raised: var(--deep-violet);
+  --text: var(--moonlight); /* 13.6:1 on midnight */
+  --text-muted: #a497c4; /* 6.6:1 on midnight, 5.3:1 on deep violet */
+  --accent: var(--lavender); /* 8.4:1 on midnight */
+  --border: #7a68a6; /* 3.7:1 on midnight — UI boundaries */
+  --border-subtle: rgb(188 166 245 / 0.18); /* decorative hairlines only */
+  --focus-ring: var(--pale-blue);
+  --danger: #f0b8be; /* soft rose, 10.6:1 on midnight; never festival red */
+  --danger-border: rgb(231 161 168 / 0.6);
+
+  /* Frosted panel — the only translucent surface family in the HTML layer */
+  --panel: rgb(23 21 47 / 0.62);
+
+  /* Shadows: layered, violet-tinted, never pure black */
+  --shadow-sm: 0 1px 2px rgb(10 8 28 / 0.35), 0 1px 1px rgb(10 8 28 / 0.2);
+  --shadow-md: 0 4px 12px rgb(10 8 28 / 0.35), 0 2px 4px rgb(10 8 28 / 0.25);
+  --text-halo: 0 0 18px rgb(23 21 47 / 0.6); /* legibility over the 3D scene */
+  --glow-moon: 0 0 120px 30px rgb(188 166 245 / 0.18);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --duration-micro: 150ms;
+  --duration-state: 250ms;
+  --duration-enter: 400ms;
+  --duration-scene: 1200ms; /* canvas fade-in; outside UI bounds by intent */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-midnight: var(--midnight);
+  --color-deep-violet: var(--deep-violet);
+  --color-amethyst: var(--amethyst);
+  --color-lavender: var(--lavender);
+  --color-moonlight: var(--moonlight);
+  --color-pale-blue: var(--pale-blue);
+  --color-champagne: var(--champagne);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-focus: var(--focus-ring);
+  --color-danger: var(--danger);
+  --color-danger-border: var(--danger-border);
+  --color-panel: var(--panel);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+
+  --font-serif: var(--font-cormorant), var(--font-noto-serif-sc), "Songti SC", Georgia, serif;
+  --font-sans: var(--font-inter), var(--font-noto-sans-sc), "PingFang SC", system-ui, sans-serif;
+
+  --ease-out: var(--ease-out);
+  --ease-in: var(--ease-in);
+
+  --animate-rise-in: rise-in 400ms var(--ease-out) both;
+  --animate-fade-in: fade-in 400ms var(--ease-out) both;
+  --animate-orbit: orbit 2.4s linear infinite;
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes shimmer {
+    50% {
+      opacity: 0.45;
+    }
   }
 }
 
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  background: var(--surface);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--amethyst);
+  color: var(--moonlight);
+}
+
+/* Shared control surface: small frosted pill used by every floating HTML control. */
+@utility control-surface {
+  border: 1px solid var(--border-subtle);
+  background: var(--panel);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,0 +1,1926 @@
+{
+  "source": "Hong Kong Observatory, 'Date and Time of the 24 Solar Terms', https://www.hko.gov.hk/en/gts/astronomy/Solar_Term.htm (data files 24SolarTerms_<year>.xml). Times are Hong Kong Time (UTC+8), rounded to the minute.",
+  "retrieved": "2026-10-17",
+  "terms": [
+    {
+      "year": 2019,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 23,
+      "minute": 39
+    },
+    {
+      "year": 2019,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 17,
+      "minute": 0
+    },
+    {
+      "year": 2019,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 11,
+      "minute": 14
+    },
+    {
+      "year": 2019,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 7,
+      "minute": 4
+    },
+    {
+      "year": 2019,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 6,
+      "hour": 5,
+      "minute": 10
+    },
+    {
+      "year": 2019,
+      "name": "春分",
+      "month": 3,
+      "day": 21,
+      "hour": 5,
+      "minute": 58
+    },
+    {
+      "year": 2019,
+      "name": "清明",
+      "month": 4,
+      "day": 5,
+      "hour": 9,
+      "minute": 51
+    },
+    {
+      "year": 2019,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 16,
+      "minute": 55
+    },
+    {
+      "year": 2019,
+      "name": "立夏",
+      "month": 5,
+      "day": 6,
+      "hour": 3,
+      "minute": 3
+    },
+    {
+      "year": 2019,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 15,
+      "minute": 59
+    },
+    {
+      "year": 2019,
+      "name": "芒种",
+      "month": 6,
+      "day": 6,
+      "hour": 7,
+      "minute": 6
+    },
+    {
+      "year": 2019,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 23,
+      "minute": 54
+    },
+    {
+      "year": 2019,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 17,
+      "minute": 21
+    },
+    {
+      "year": 2019,
+      "name": "大暑",
+      "month": 7,
+      "day": 23,
+      "hour": 10,
+      "minute": 50
+    },
+    {
+      "year": 2019,
+      "name": "立秋",
+      "month": 8,
+      "day": 8,
+      "hour": 3,
+      "minute": 13
+    },
+    {
+      "year": 2019,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 18,
+      "minute": 2
+    },
+    {
+      "year": 2019,
+      "name": "白露",
+      "month": 9,
+      "day": 8,
+      "hour": 6,
+      "minute": 17
+    },
+    {
+      "year": 2019,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 15,
+      "minute": 50
+    },
+    {
+      "year": 2019,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 22,
+      "minute": 6
+    },
+    {
+      "year": 2019,
+      "name": "霜降",
+      "month": 10,
+      "day": 24,
+      "hour": 1,
+      "minute": 20
+    },
+    {
+      "year": 2019,
+      "name": "立冬",
+      "month": 11,
+      "day": 8,
+      "hour": 1,
+      "minute": 24
+    },
+    {
+      "year": 2019,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 22,
+      "minute": 59
+    },
+    {
+      "year": 2019,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 18,
+      "minute": 18
+    },
+    {
+      "year": 2019,
+      "name": "冬至",
+      "month": 12,
+      "day": 22,
+      "hour": 12,
+      "minute": 19
+    },
+    {
+      "year": 2020,
+      "name": "小寒",
+      "month": 1,
+      "day": 6,
+      "hour": 5,
+      "minute": 30
+    },
+    {
+      "year": 2020,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 22,
+      "minute": 55
+    },
+    {
+      "year": 2020,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 17,
+      "minute": 3
+    },
+    {
+      "year": 2020,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 12,
+      "minute": 57
+    },
+    {
+      "year": 2020,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 10,
+      "minute": 57
+    },
+    {
+      "year": 2020,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 11,
+      "minute": 50
+    },
+    {
+      "year": 2020,
+      "name": "清明",
+      "month": 4,
+      "day": 4,
+      "hour": 15,
+      "minute": 38
+    },
+    {
+      "year": 2020,
+      "name": "谷雨",
+      "month": 4,
+      "day": 19,
+      "hour": 22,
+      "minute": 45
+    },
+    {
+      "year": 2020,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 8,
+      "minute": 51
+    },
+    {
+      "year": 2020,
+      "name": "小满",
+      "month": 5,
+      "day": 20,
+      "hour": 21,
+      "minute": 49
+    },
+    {
+      "year": 2020,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 12,
+      "minute": 58
+    },
+    {
+      "year": 2020,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 5,
+      "minute": 44
+    },
+    {
+      "year": 2020,
+      "name": "小暑",
+      "month": 7,
+      "day": 6,
+      "hour": 23,
+      "minute": 14
+    },
+    {
+      "year": 2020,
+      "name": "大暑",
+      "month": 7,
+      "day": 22,
+      "hour": 16,
+      "minute": 37
+    },
+    {
+      "year": 2020,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 9,
+      "minute": 6
+    },
+    {
+      "year": 2020,
+      "name": "处暑",
+      "month": 8,
+      "day": 22,
+      "hour": 23,
+      "minute": 45
+    },
+    {
+      "year": 2020,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 12,
+      "minute": 8
+    },
+    {
+      "year": 2020,
+      "name": "秋分",
+      "month": 9,
+      "day": 22,
+      "hour": 21,
+      "minute": 31
+    },
+    {
+      "year": 2020,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 3,
+      "minute": 55
+    },
+    {
+      "year": 2020,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 7,
+      "minute": 0
+    },
+    {
+      "year": 2020,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 7,
+      "minute": 14
+    },
+    {
+      "year": 2020,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 4,
+      "minute": 40
+    },
+    {
+      "year": 2020,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 0,
+      "minute": 9
+    },
+    {
+      "year": 2020,
+      "name": "冬至",
+      "month": 12,
+      "day": 21,
+      "hour": 18,
+      "minute": 2
+    },
+    {
+      "year": 2021,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 11,
+      "minute": 23
+    },
+    {
+      "year": 2021,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 4,
+      "minute": 40
+    },
+    {
+      "year": 2021,
+      "name": "立春",
+      "month": 2,
+      "day": 3,
+      "hour": 22,
+      "minute": 59
+    },
+    {
+      "year": 2021,
+      "name": "雨水",
+      "month": 2,
+      "day": 18,
+      "hour": 18,
+      "minute": 44
+    },
+    {
+      "year": 2021,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 16,
+      "minute": 54
+    },
+    {
+      "year": 2021,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 17,
+      "minute": 37
+    },
+    {
+      "year": 2021,
+      "name": "清明",
+      "month": 4,
+      "day": 4,
+      "hour": 21,
+      "minute": 35
+    },
+    {
+      "year": 2021,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 4,
+      "minute": 33
+    },
+    {
+      "year": 2021,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 14,
+      "minute": 47
+    },
+    {
+      "year": 2021,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 3,
+      "minute": 37
+    },
+    {
+      "year": 2021,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 18,
+      "minute": 52
+    },
+    {
+      "year": 2021,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 11,
+      "minute": 32
+    },
+    {
+      "year": 2021,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 5,
+      "minute": 5
+    },
+    {
+      "year": 2021,
+      "name": "大暑",
+      "month": 7,
+      "day": 22,
+      "hour": 22,
+      "minute": 26
+    },
+    {
+      "year": 2021,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 14,
+      "minute": 54
+    },
+    {
+      "year": 2021,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 5,
+      "minute": 35
+    },
+    {
+      "year": 2021,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 17,
+      "minute": 53
+    },
+    {
+      "year": 2021,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 3,
+      "minute": 21
+    },
+    {
+      "year": 2021,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 9,
+      "minute": 39
+    },
+    {
+      "year": 2021,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 12,
+      "minute": 51
+    },
+    {
+      "year": 2021,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 12,
+      "minute": 59
+    },
+    {
+      "year": 2021,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 10,
+      "minute": 34
+    },
+    {
+      "year": 2021,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 5,
+      "minute": 57
+    },
+    {
+      "year": 2021,
+      "name": "冬至",
+      "month": 12,
+      "day": 21,
+      "hour": 23,
+      "minute": 59
+    },
+    {
+      "year": 2022,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 17,
+      "minute": 14
+    },
+    {
+      "year": 2022,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 10,
+      "minute": 39
+    },
+    {
+      "year": 2022,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 4,
+      "minute": 51
+    },
+    {
+      "year": 2022,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 0,
+      "minute": 43
+    },
+    {
+      "year": 2022,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 22,
+      "minute": 44
+    },
+    {
+      "year": 2022,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 23,
+      "minute": 33
+    },
+    {
+      "year": 2022,
+      "name": "清明",
+      "month": 4,
+      "day": 5,
+      "hour": 3,
+      "minute": 20
+    },
+    {
+      "year": 2022,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 10,
+      "minute": 24
+    },
+    {
+      "year": 2022,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 20,
+      "minute": 26
+    },
+    {
+      "year": 2022,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 9,
+      "minute": 23
+    },
+    {
+      "year": 2022,
+      "name": "芒种",
+      "month": 6,
+      "day": 6,
+      "hour": 0,
+      "minute": 26
+    },
+    {
+      "year": 2022,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 17,
+      "minute": 14
+    },
+    {
+      "year": 2022,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 10,
+      "minute": 38
+    },
+    {
+      "year": 2022,
+      "name": "大暑",
+      "month": 7,
+      "day": 23,
+      "hour": 4,
+      "minute": 7
+    },
+    {
+      "year": 2022,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 20,
+      "minute": 29
+    },
+    {
+      "year": 2022,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 11,
+      "minute": 16
+    },
+    {
+      "year": 2022,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 23,
+      "minute": 32
+    },
+    {
+      "year": 2022,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 9,
+      "minute": 4
+    },
+    {
+      "year": 2022,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 15,
+      "minute": 22
+    },
+    {
+      "year": 2022,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 18,
+      "minute": 36
+    },
+    {
+      "year": 2022,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 18,
+      "minute": 45
+    },
+    {
+      "year": 2022,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 16,
+      "minute": 20
+    },
+    {
+      "year": 2022,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 11,
+      "minute": 46
+    },
+    {
+      "year": 2022,
+      "name": "冬至",
+      "month": 12,
+      "day": 22,
+      "hour": 5,
+      "minute": 48
+    },
+    {
+      "year": 2023,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 23,
+      "minute": 5
+    },
+    {
+      "year": 2023,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 16,
+      "minute": 30
+    },
+    {
+      "year": 2023,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 10,
+      "minute": 43
+    },
+    {
+      "year": 2023,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 6,
+      "minute": 34
+    },
+    {
+      "year": 2023,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 6,
+      "hour": 4,
+      "minute": 36
+    },
+    {
+      "year": 2023,
+      "name": "春分",
+      "month": 3,
+      "day": 21,
+      "hour": 5,
+      "minute": 24
+    },
+    {
+      "year": 2023,
+      "name": "清明",
+      "month": 4,
+      "day": 5,
+      "hour": 9,
+      "minute": 13
+    },
+    {
+      "year": 2023,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 16,
+      "minute": 14
+    },
+    {
+      "year": 2023,
+      "name": "立夏",
+      "month": 5,
+      "day": 6,
+      "hour": 2,
+      "minute": 19
+    },
+    {
+      "year": 2023,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 15,
+      "minute": 9
+    },
+    {
+      "year": 2023,
+      "name": "芒种",
+      "month": 6,
+      "day": 6,
+      "hour": 6,
+      "minute": 18
+    },
+    {
+      "year": 2023,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 22,
+      "minute": 58
+    },
+    {
+      "year": 2023,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 16,
+      "minute": 31
+    },
+    {
+      "year": 2023,
+      "name": "大暑",
+      "month": 7,
+      "day": 23,
+      "hour": 9,
+      "minute": 50
+    },
+    {
+      "year": 2023,
+      "name": "立秋",
+      "month": 8,
+      "day": 8,
+      "hour": 2,
+      "minute": 23
+    },
+    {
+      "year": 2023,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 17,
+      "minute": 1
+    },
+    {
+      "year": 2023,
+      "name": "白露",
+      "month": 9,
+      "day": 8,
+      "hour": 5,
+      "minute": 27
+    },
+    {
+      "year": 2023,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 14,
+      "minute": 50
+    },
+    {
+      "year": 2023,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 21,
+      "minute": 16
+    },
+    {
+      "year": 2023,
+      "name": "霜降",
+      "month": 10,
+      "day": 24,
+      "hour": 0,
+      "minute": 21
+    },
+    {
+      "year": 2023,
+      "name": "立冬",
+      "month": 11,
+      "day": 8,
+      "hour": 0,
+      "minute": 36
+    },
+    {
+      "year": 2023,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 22,
+      "minute": 3
+    },
+    {
+      "year": 2023,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 17,
+      "minute": 33
+    },
+    {
+      "year": 2023,
+      "name": "冬至",
+      "month": 12,
+      "day": 22,
+      "hour": 11,
+      "minute": 27
+    },
+    {
+      "year": 2024,
+      "name": "小寒",
+      "month": 1,
+      "day": 6,
+      "hour": 4,
+      "minute": 49
+    },
+    {
+      "year": 2024,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 22,
+      "minute": 7
+    },
+    {
+      "year": 2024,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 16,
+      "minute": 27
+    },
+    {
+      "year": 2024,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 12,
+      "minute": 13
+    },
+    {
+      "year": 2024,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 10,
+      "minute": 23
+    },
+    {
+      "year": 2024,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 11,
+      "minute": 6
+    },
+    {
+      "year": 2024,
+      "name": "清明",
+      "month": 4,
+      "day": 4,
+      "hour": 15,
+      "minute": 2
+    },
+    {
+      "year": 2024,
+      "name": "谷雨",
+      "month": 4,
+      "day": 19,
+      "hour": 22,
+      "minute": 0
+    },
+    {
+      "year": 2024,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 8,
+      "minute": 10
+    },
+    {
+      "year": 2024,
+      "name": "小满",
+      "month": 5,
+      "day": 20,
+      "hour": 21,
+      "minute": 0
+    },
+    {
+      "year": 2024,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 12,
+      "minute": 10
+    },
+    {
+      "year": 2024,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 4,
+      "minute": 51
+    },
+    {
+      "year": 2024,
+      "name": "小暑",
+      "month": 7,
+      "day": 6,
+      "hour": 22,
+      "minute": 20
+    },
+    {
+      "year": 2024,
+      "name": "大暑",
+      "month": 7,
+      "day": 22,
+      "hour": 15,
+      "minute": 44
+    },
+    {
+      "year": 2024,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 8,
+      "minute": 9
+    },
+    {
+      "year": 2024,
+      "name": "处暑",
+      "month": 8,
+      "day": 22,
+      "hour": 22,
+      "minute": 55
+    },
+    {
+      "year": 2024,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 11,
+      "minute": 11
+    },
+    {
+      "year": 2024,
+      "name": "秋分",
+      "month": 9,
+      "day": 22,
+      "hour": 20,
+      "minute": 44
+    },
+    {
+      "year": 2024,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 3,
+      "minute": 0
+    },
+    {
+      "year": 2024,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 6,
+      "minute": 15
+    },
+    {
+      "year": 2024,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 6,
+      "minute": 20
+    },
+    {
+      "year": 2024,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 3,
+      "minute": 56
+    },
+    {
+      "year": 2024,
+      "name": "大雪",
+      "month": 12,
+      "day": 6,
+      "hour": 23,
+      "minute": 17
+    },
+    {
+      "year": 2024,
+      "name": "冬至",
+      "month": 12,
+      "day": 21,
+      "hour": 17,
+      "minute": 21
+    },
+    {
+      "year": 2025,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 10,
+      "minute": 33
+    },
+    {
+      "year": 2025,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 4,
+      "minute": 0
+    },
+    {
+      "year": 2025,
+      "name": "立春",
+      "month": 2,
+      "day": 3,
+      "hour": 22,
+      "minute": 10
+    },
+    {
+      "year": 2025,
+      "name": "雨水",
+      "month": 2,
+      "day": 18,
+      "hour": 18,
+      "minute": 7
+    },
+    {
+      "year": 2025,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 16,
+      "minute": 7
+    },
+    {
+      "year": 2025,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 17,
+      "minute": 1
+    },
+    {
+      "year": 2025,
+      "name": "清明",
+      "month": 4,
+      "day": 4,
+      "hour": 20,
+      "minute": 49
+    },
+    {
+      "year": 2025,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 3,
+      "minute": 56
+    },
+    {
+      "year": 2025,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 13,
+      "minute": 57
+    },
+    {
+      "year": 2025,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 2,
+      "minute": 55
+    },
+    {
+      "year": 2025,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 17,
+      "minute": 57
+    },
+    {
+      "year": 2025,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 10,
+      "minute": 42
+    },
+    {
+      "year": 2025,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 4,
+      "minute": 5
+    },
+    {
+      "year": 2025,
+      "name": "大暑",
+      "month": 7,
+      "day": 22,
+      "hour": 21,
+      "minute": 29
+    },
+    {
+      "year": 2025,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 13,
+      "minute": 52
+    },
+    {
+      "year": 2025,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 4,
+      "minute": 34
+    },
+    {
+      "year": 2025,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 16,
+      "minute": 52
+    },
+    {
+      "year": 2025,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 2,
+      "minute": 19
+    },
+    {
+      "year": 2025,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 8,
+      "minute": 41
+    },
+    {
+      "year": 2025,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 11,
+      "minute": 51
+    },
+    {
+      "year": 2025,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 12,
+      "minute": 4
+    },
+    {
+      "year": 2025,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 9,
+      "minute": 36
+    },
+    {
+      "year": 2025,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 5,
+      "minute": 5
+    },
+    {
+      "year": 2025,
+      "name": "冬至",
+      "month": 12,
+      "day": 21,
+      "hour": 23,
+      "minute": 3
+    },
+    {
+      "year": 2026,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 16,
+      "minute": 23
+    },
+    {
+      "year": 2026,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 9,
+      "minute": 45
+    },
+    {
+      "year": 2026,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 4,
+      "minute": 2
+    },
+    {
+      "year": 2026,
+      "name": "雨水",
+      "month": 2,
+      "day": 18,
+      "hour": 23,
+      "minute": 52
+    },
+    {
+      "year": 2026,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 21,
+      "minute": 59
+    },
+    {
+      "year": 2026,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 22,
+      "minute": 46
+    },
+    {
+      "year": 2026,
+      "name": "清明",
+      "month": 4,
+      "day": 5,
+      "hour": 2,
+      "minute": 40
+    },
+    {
+      "year": 2026,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 9,
+      "minute": 39
+    },
+    {
+      "year": 2026,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 19,
+      "minute": 49
+    },
+    {
+      "year": 2026,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 8,
+      "minute": 37
+    },
+    {
+      "year": 2026,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 23,
+      "minute": 48
+    },
+    {
+      "year": 2026,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 16,
+      "minute": 25
+    },
+    {
+      "year": 2026,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 9,
+      "minute": 57
+    },
+    {
+      "year": 2026,
+      "name": "大暑",
+      "month": 7,
+      "day": 23,
+      "hour": 3,
+      "minute": 13
+    },
+    {
+      "year": 2026,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 19,
+      "minute": 43
+    },
+    {
+      "year": 2026,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 10,
+      "minute": 19
+    },
+    {
+      "year": 2026,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 22,
+      "minute": 41
+    },
+    {
+      "year": 2026,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 8,
+      "minute": 5
+    },
+    {
+      "year": 2026,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 14,
+      "minute": 29
+    },
+    {
+      "year": 2026,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 17,
+      "minute": 38
+    },
+    {
+      "year": 2026,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 17,
+      "minute": 52
+    },
+    {
+      "year": 2026,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 15,
+      "minute": 23
+    },
+    {
+      "year": 2026,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 10,
+      "minute": 53
+    },
+    {
+      "year": 2026,
+      "name": "冬至",
+      "month": 12,
+      "day": 22,
+      "hour": 4,
+      "minute": 50
+    },
+    {
+      "year": 2027,
+      "name": "小寒",
+      "month": 1,
+      "day": 5,
+      "hour": 22,
+      "minute": 10
+    },
+    {
+      "year": 2027,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 15,
+      "minute": 30
+    },
+    {
+      "year": 2027,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 9,
+      "minute": 46
+    },
+    {
+      "year": 2027,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 5,
+      "minute": 33
+    },
+    {
+      "year": 2027,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 6,
+      "hour": 3,
+      "minute": 40
+    },
+    {
+      "year": 2027,
+      "name": "春分",
+      "month": 3,
+      "day": 21,
+      "hour": 4,
+      "minute": 25
+    },
+    {
+      "year": 2027,
+      "name": "清明",
+      "month": 4,
+      "day": 5,
+      "hour": 8,
+      "minute": 17
+    },
+    {
+      "year": 2027,
+      "name": "谷雨",
+      "month": 4,
+      "day": 20,
+      "hour": 15,
+      "minute": 18
+    },
+    {
+      "year": 2027,
+      "name": "立夏",
+      "month": 5,
+      "day": 6,
+      "hour": 1,
+      "minute": 25
+    },
+    {
+      "year": 2027,
+      "name": "小满",
+      "month": 5,
+      "day": 21,
+      "hour": 14,
+      "minute": 18
+    },
+    {
+      "year": 2027,
+      "name": "芒种",
+      "month": 6,
+      "day": 6,
+      "hour": 5,
+      "minute": 26
+    },
+    {
+      "year": 2027,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 22,
+      "minute": 11
+    },
+    {
+      "year": 2027,
+      "name": "小暑",
+      "month": 7,
+      "day": 7,
+      "hour": 15,
+      "minute": 37
+    },
+    {
+      "year": 2027,
+      "name": "大暑",
+      "month": 7,
+      "day": 23,
+      "hour": 9,
+      "minute": 5
+    },
+    {
+      "year": 2027,
+      "name": "立秋",
+      "month": 8,
+      "day": 8,
+      "hour": 1,
+      "minute": 27
+    },
+    {
+      "year": 2027,
+      "name": "处暑",
+      "month": 8,
+      "day": 23,
+      "hour": 16,
+      "minute": 14
+    },
+    {
+      "year": 2027,
+      "name": "白露",
+      "month": 9,
+      "day": 8,
+      "hour": 4,
+      "minute": 28
+    },
+    {
+      "year": 2027,
+      "name": "秋分",
+      "month": 9,
+      "day": 23,
+      "hour": 14,
+      "minute": 2
+    },
+    {
+      "year": 2027,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 20,
+      "minute": 17
+    },
+    {
+      "year": 2027,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 23,
+      "minute": 33
+    },
+    {
+      "year": 2027,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 23,
+      "minute": 39
+    },
+    {
+      "year": 2027,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 21,
+      "minute": 16
+    },
+    {
+      "year": 2027,
+      "name": "大雪",
+      "month": 12,
+      "day": 7,
+      "hour": 16,
+      "minute": 38
+    },
+    {
+      "year": 2027,
+      "name": "冬至",
+      "month": 12,
+      "day": 22,
+      "hour": 10,
+      "minute": 42
+    },
+    {
+      "year": 2028,
+      "name": "小寒",
+      "month": 1,
+      "day": 6,
+      "hour": 3,
+      "minute": 55
+    },
+    {
+      "year": 2028,
+      "name": "大寒",
+      "month": 1,
+      "day": 20,
+      "hour": 21,
+      "minute": 22
+    },
+    {
+      "year": 2028,
+      "name": "立春",
+      "month": 2,
+      "day": 4,
+      "hour": 15,
+      "minute": 31
+    },
+    {
+      "year": 2028,
+      "name": "雨水",
+      "month": 2,
+      "day": 19,
+      "hour": 11,
+      "minute": 26
+    },
+    {
+      "year": 2028,
+      "name": "惊蛰",
+      "month": 3,
+      "day": 5,
+      "hour": 9,
+      "minute": 25
+    },
+    {
+      "year": 2028,
+      "name": "春分",
+      "month": 3,
+      "day": 20,
+      "hour": 10,
+      "minute": 17
+    },
+    {
+      "year": 2028,
+      "name": "清明",
+      "month": 4,
+      "day": 4,
+      "hour": 14,
+      "minute": 3
+    },
+    {
+      "year": 2028,
+      "name": "谷雨",
+      "month": 4,
+      "day": 19,
+      "hour": 21,
+      "minute": 9
+    },
+    {
+      "year": 2028,
+      "name": "立夏",
+      "month": 5,
+      "day": 5,
+      "hour": 7,
+      "minute": 12
+    },
+    {
+      "year": 2028,
+      "name": "小满",
+      "month": 5,
+      "day": 20,
+      "hour": 20,
+      "minute": 10
+    },
+    {
+      "year": 2028,
+      "name": "芒种",
+      "month": 6,
+      "day": 5,
+      "hour": 11,
+      "minute": 16
+    },
+    {
+      "year": 2028,
+      "name": "夏至",
+      "month": 6,
+      "day": 21,
+      "hour": 4,
+      "minute": 2
+    },
+    {
+      "year": 2028,
+      "name": "小暑",
+      "month": 7,
+      "day": 6,
+      "hour": 21,
+      "minute": 30
+    },
+    {
+      "year": 2028,
+      "name": "大暑",
+      "month": 7,
+      "day": 22,
+      "hour": 14,
+      "minute": 54
+    },
+    {
+      "year": 2028,
+      "name": "立秋",
+      "month": 8,
+      "day": 7,
+      "hour": 7,
+      "minute": 21
+    },
+    {
+      "year": 2028,
+      "name": "处暑",
+      "month": 8,
+      "day": 22,
+      "hour": 22,
+      "minute": 1
+    },
+    {
+      "year": 2028,
+      "name": "白露",
+      "month": 9,
+      "day": 7,
+      "hour": 10,
+      "minute": 22
+    },
+    {
+      "year": 2028,
+      "name": "秋分",
+      "month": 9,
+      "day": 22,
+      "hour": 19,
+      "minute": 45
+    },
+    {
+      "year": 2028,
+      "name": "寒露",
+      "month": 10,
+      "day": 8,
+      "hour": 2,
+      "minute": 9
+    },
+    {
+      "year": 2028,
+      "name": "霜降",
+      "month": 10,
+      "day": 23,
+      "hour": 5,
+      "minute": 13
+    },
+    {
+      "year": 2028,
+      "name": "立冬",
+      "month": 11,
+      "day": 7,
+      "hour": 5,
+      "minute": 27
+    },
+    {
+      "year": 2028,
+      "name": "小雪",
+      "month": 11,
+      "day": 22,
+      "hour": 2,
+      "minute": 54
+    },
+    {
+      "year": 2028,
+      "name": "大雪",
+      "month": 12,
+      "day": 6,
+      "hour": 22,
+      "minute": 25
+    },
+    {
+      "year": 2028,
+      "name": "冬至",
+      "month": 12,
+      "day": 21,
+      "hour": 16,
+      "minute": 20
+    }
+  ]
+}
